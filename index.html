@@ -1,79 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title"></title>
-    <link rel="stylesheet" href="CSS/style.css">
+    <title>苏省 - 个人网页</title>
+    <link rel="stylesheet" href="./CSS/style.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="menu-icon" id="menu-icon">
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="hero">
+        <div class="container" id="main-container">
+            <div class="column">
+                <span data-order="7">直</span><span data-order="8">到</span><span data-order="9">西</span><span data-order="10">湖</span><span data-order="11">畔</span>
             </div>
-            <ul id="nav-list">
-                <li><a href="#bio" id="nav-bio"></a></li>
-                <li><a href="#skills" id="nav-skills"></a></li>
-                <li><a href="#projects" id="nav-projects"></a></li>
-                <li><a href="#github" id="nav-github"></a></li>
-                <li><a href="#contact" id="nav-contact"></a></li>
-            </ul>
-        </nav>
-        <select id="language-selector">
-            <option value="en">English</option>
-            <option value="zh">中文</option>
-        </select>
-    </header>
+            <div class="column">
+                <span data-order="0">赠</span><span data-order="1">君</span><span data-order="2" class="shine">明</span><span data-order="3" class="shine">月</span><span data-order="4">满</span><span data-order="5">前</span><span data-order="6">溪</span>
+            </div>
+        </div>
+    </div>
 
-    <h1 id="page-title"></h1>
+    <div class="drawer left" id="left-drawer">
+        <div class="drawer-content">
+            <div class="section-title">FILE // 档案</div>
+            <div class="profile-card">
+                <div class="about-grid">
+                    <img src="./images/XingSu.jpg" alt="苏晟 XingSu" class="profile-img">
+                    <div>
+                        <h2 style="margin-top:0; font-family: 'ChenSiruo', serif; font-size: 2rem; margin-bottom: 5px;">苏省 (XingSu)</h2>
+                        <p style="color: #00ffff; font-size: 0.9rem; margin-bottom: 20px;">System & Level Designer</p>
+                    </div>
+                </div>
+                <p style="line-height: 1.6; color: #d0e0f0; font-size: 0.95rem; margin-top: 20px;">
+                    罗彻斯特理工学院 (RIT) 游戏设计与开发专业，2027届毕业生。<br><br>
+                    专注于大战略游戏（Grand Strategy）系统拆解与轻量化策略维度的探索。具备从机制打样到敏捷协作的完整链路经验。<br><br>
+                    📍 Base: 杭州 (2026.05 起)
+                </p>
+            </div>
+            
+            <div class="section-title">SKILLS // 核心技能</div>
+            <div class="tags" style="margin-bottom: 10px;">
+                <span>系统设计</span><span>数值打样</span><span>C# / Unity</span>
+            </div>
+            <div class="tags">
+                <span>关卡结构</span><span>Github 敏捷协作</span><span>硬核机制拆解</span>
+            </div>
+            <div class="bottom-spacer"></div>
+        </div>
+        <div class="drawer-tab">
+            <div class="tab-text">ABOUT ME</div>
+        </div>
+    </div>
 
-    <img src="images/XingSu.jpg" alt="" id="profile-photo">
+    <div class="drawer right" id="right-drawer">
+        <div class="drawer-tab">
+            <div class="tab-text">PROJECTS</div>
+        </div>
+        <div class="drawer-content">
+            <div class="section-title">DATABASE // 项目数据库</div>
+            
+            <a href="slg-project.html" class="project-link">
+                <div class="glass-card">
+                    <div class="tags"><span>Team Project</span><span>System Design</span></div>
+                    <h3>代号：像素 SLG</h3>
+                    <p>轻量化养成与网格策略纵深的回合制游戏。主导核心战斗机制打样与团队工作流建立。</p>
+                </div>
+            </a>
 
-    <section id="bio">
-        <h2 id="bio-title"></h2>
-        <p id="bio-content"></p>
-    </section>
+            <a href="design-analysis.html" class="project-link">
+                <div class="glass-card">
+                    <div class="tags"><span>Analysis</span><span>Weekly Log</span></div>
+                    <h3>游戏机制拆解周报</h3>
+                    <p>长期专栏。深度剖析《十字军之王3》、《全面战争》等大战略游戏的叙事张力与数值陷阱。</p>
+                </div>
+            </a>
+            
+            <a href="prototype-demo.html" class="project-link">
+                <div class="glass-card">
+                    <div class="tags"><span>Prototype</span><span>Game Feel</span></div>
+                    <h3>机制原型切片库</h3>
+                    <p>大学期间迭代的多个核心玩法原型集合，重在交互反馈验证。</p>
+                </div>
+            </a>
+            <div class="bottom-spacer"></div>
+        </div>
+    </div>
 
-    <section id="skills">
-        <h2 id="skills-title"></h2>
-        <ul>
-            <li id="skill-1"></li>
-            <li id="skill-2"></li>
-            <li id="skill-3"></li>
-        </ul>
-    </section>
-
-    <section id="projects">
-        <h2 id="projects-title"></h2>
-        <ul>
-            <li><a href="https://people.rit.edu/xs2394/Dualing_Drivers_V1.1.zip" id="project-1"></a></li>
-            <li><a href="https://docs.google.com/document/d/1bSA74qrUTNnYsuGtpg6VC6JpPryIBx_sJA4YoCi8E8w/edit?usp=sharing" id="project-2"></a></li>
-            <li><a href="#" id="project-3"></a></li>
-        </ul>
-    </section>
-
-    <section id="github">
-        <h2 id="github-title"></h2>
-        <a href="https://github.com/xsu217822" target="_blank" id="github-link"></a>
-    </section>
-
-    <section id="contact">
-        <h2 id="contact-title"></h2>
-        <p id="contact-content"></p>
-    </section>
-
-    <footer>
-        <p id="footer-connect"></p>
-        <a href="https://www.linkedin.com/in/xsu217822" target="_blank" id="linkedin"></a>
-        <a href="https://twitter.com/xingsu" target="_blank" id="twitter"></a>
-        <a href="https://www.facebook.com/xingsu" target="_blank" id="facebook"></a>
-        <p id="footer-copyright"></p>
-    </footer>
-
-    <script src="js/language.js"></script>
-    <script src="js/menu.js"></script>
+    <script src="./js/main.js"></script>
 </body>
 </html>
