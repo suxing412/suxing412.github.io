@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Monsterpedia - 苏省 XingSu</title>
+    <link rel="stylesheet" href="./CSS/style.css">
+    <link rel="stylesheet" href="./CSS/detail.css">
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <a href="index.html" class="hud-back">← BACK TO HUB</a>
+
+    <div class="detail-container">
+        
+        <div class="project-header">
+            <h1 class="massive-title">MONSTERPEDIA</h1>
+            <h2 class="project-subtitle">超自然调查与社交博弈</h2>
+            <div class="project-meta">
+                <span>2025.08 - 2025.12</span>
+                <span>4人团队</span>
+                <span>系统策划 & 主程</span>
+            </div>
+            <div class="tags" style="justify-content: flex-start;">
+                <span>叙事调查</span><span>系统重构</span><span>状态机设计</span><span>C#</span>
+            </div>
+        </div>
+
+        <div class="hero-media">
+            <video 
+                src="./images/MonsterpediaTrailer.mp4" 
+                autoplay loop muted playsinline controls>
+            </video>
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">01. OVERVIEW // 游戏概念企划</h2>
+            <div class="content-body" style="margin-bottom: 25px;">
+                <p>在开发初期，我们通过 One Pager 快速统一了团队的愿景：一款强调线索推理与心理博弈的 2D 点击解谜游戏。</p>
+            </div>
+            <img src="./images/one-pager.png" alt="Monsterpedia One Pager" class="showcase-img">
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">02. THE PITCH // 超自然调查与社交博弈</h2>
+            <div class="content-body">
+                <p>《Monsterpedia》是一款融合了超自然调查与社交战斗（Social Combat）的游戏。玩家扮演一名侦探，必须揭开看似普通犯罪背后的真实谜团。</p>
+                <ul>
+                    <li><strong>现场勘查与线索收集：</strong> 调查犯罪现场，收集证据，并与旁观者交谈以还原真相。</li>
+                    <li><strong>社交破防机制 (Composure System)：</strong> 游戏的核心战斗不是物理攻击，而是通过玩家收集的证据来反驳嫌疑人的主张，从而逐步削弱他们的“心理防线 (Composure)”，最终打破伪装抓住真凶。</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">03. ARCHITECTURE & POSTMORTEM // 架构重构与开发复盘</h2>
+            <div class="content-body">
+                <p>作为该项目的开发者，我深刻理解了游戏系统必须为扩展性和团队协作做好规划。在开发过程中，我主导了底层架构的重构，解决了以下核心问题：</p>
+                <ul>
+                    <li><strong>突破耦合瓶颈：</strong> 在添加新游戏机制时，原有的整体代码架构面临巨大挑战。我设计了基于 <span class="highlight">Scriptable Object</span> 的数据与逻辑分离架构，彻底降低了线索与对话系统的耦合度。</li>
+                    <li><strong>工业化效率提升：</strong> 花时间重组系统极大地改善了整体工作流，减少了长期问题。重构后，新增一个线索分支的配置时间从 30 分钟压缩至 <span class="highlight">20 分钟（效率提升 30%）</span>，显著提升了团队迭代效率。</li>
+                </ul>
+                <p style="margin-top: 20px; font-style: italic; opacity: 0.8;">"通过这个项目，我最大的收获是对整体开发流程的把控感。—— William Su"</p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">04. ART ASSETS // 角色设计与像素动画</h2>
+            <div class="content-body">
+                <p>游戏采用了复古像素风格。为了凸显社交博弈（Social Combat）的紧张感，我们为每个嫌疑人和旁观者设计了极具个人特征的待机动画（Idle Cycle）。</p>
+            </div>
+            
+            <div class="character-grid">
+                <div class="character-card">
+                    <img src="./images/detective_idleCycle.gif" class="pixel-art" alt="Detective">
+                    <p>Detective (Player)</p>
+                </div>
+                <div class="character-card">
+                    <img src="./images/bartender_idleCycle.gif" class="pixel-art" alt="Bartender">
+                    <p>Bartender (Bystander)</p>
+                </div>
+                <div class="character-card">
+                    <img src="./images/werewolf_idleCycle.gif" class="pixel-art" alt="Werewolf">
+                    <p>Werewolf (Suspect)</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="./js/main.js"></script>
+</body>
+</html>

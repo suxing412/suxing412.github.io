@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Graves of Sailors - 苏省 XingSu</title>
+    <link rel="stylesheet" href="./CSS/style.css">
+    <link rel="stylesheet" href="./CSS/detail.css">
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <a href="index.html" class="hud-back">← BACK TO HUB</a>
+
+    <div class="detail-container">
+        
+        <div class="project-header">
+            <h1 class="massive-title" style="font-size: 4.5rem;">GRAVES OF SAILORS</h1>
+            <h2 class="project-subtitle">There Are No Flowers On The Graves Of Sailors</h2>
+            <div class="project-meta">
+                <span>2025.01 - 2025.05</span>
+                <span>4人团队</span>
+                <span>主策 & 数值策划</span>
+            </div>
+            <div class="tags" style="justify-content: flex-start;">
+                <span>Tabletop Game</span><span>Fog of War</span><span>机制做减法</span><span>Excel 数值模拟</span>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <img src="./images/sailors-box.jpg" alt="游戏实体配件箱" class="sailors-hero-img">
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">01. THE VISION // 电子游戏级的“桌面迷雾”</h2>
+            <div class="content-body">
+                <p>本作的初始架构是按照一款带有“大战略 (Grand Strategy)”色彩的电子游戏进行设计的。我的核心目的是在桌面上还原海战中极其残酷的<strong>“信息战与战争迷雾 (Fog of War)”</strong>。</p>
+                <ul>
+                    <li><strong>公开坐标，隐藏身份：</strong> 棋盘上所有战舰的坐标对双方公开，但舰船的真实类型与属性是完全隐藏的。</li>
+                    <li><strong>行为侧写系统：</strong> 玩家必须像真正的指挥官一样，通过观察敌方棋子的移动步数、火力类型（普通炮击或航空打击）等线索，反向推理出敌方的舰种配置。</li>
+                    <li><strong>旗舰斩首机制：</strong> 每方暗中指定一艘旗舰，一旦旗舰被击沉，全舰队将瘫痪一回合。隐藏己方旗舰并猎杀敌方旗舰是博弈的核心。</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">02. COMPROMISE // 50分钟课时的“系统降维”</h2>
+            <div class="content-body">
+                <p>在早期的盲测中，玩家给出了极其尖锐的反馈：<span class="highlight">"这太像一个电子游戏了，有太多需要追踪的数据"</span>。再加上课程要求游戏必须在一个 50 分钟的课时内完成一局完整体验，我作为主策必须对系统进行大刀阔斧的“做减法”。</p>
+                <ul>
+                    <li><strong>胜利条件的妥协：</strong> 游戏最初的胜利条件是硬核的“全歼敌方舰队”。为了适配 50 分钟的极限时长，我将其修改为类似“First Blood”的短局模式（只要击沉一艘关键船只即可宣告胜利）。</li>
+                    <li><strong>抹除繁琐的运算：</strong> 删除了大量需要人工运算的次级战舰类型，将核心聚焦于“战列舰 (Battleship)”与“航空母舰 (Carrier)”这两种具有极高差异性的单位上。</li>
+                </ul>
+                <p style="margin-top: 20px; font-style: italic; opacity: 0.8;">“这次开发让我深刻意识到，设计出精妙的系统只是第一步；如何根据物理载体和游玩场景的限制，克制地剪裁系统，才是策划的必修课。”</p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">03. BALANCING // 基于 Excel 的动态胜率控制</h2>
+            <div class="content-body">
+                <p>由于游戏采用了掷骰子 (XdY) 的随机伤害判定，如何保证竞技的公平性成为了最大的挑战。我通过 Excel 建立了一套完整的伤害期望与血量模型，并将战列舰与航母在标准对战中的胜率严格平衡在 <span class="highlight">45% - 55%</span> 的区间内。</p>
+            </div>
+            
+            <div class="media-grid">
+                <div class="content-block">
+                    <img src="./images/sailors-card-1.png" alt="USS Hornet Card" class="sailors-card-img">
+                </div>
+                <div class="content-block">
+                    <img src="./images/sailors-card-2.png" alt="Katsuragi Card" class="sailors-card-img">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="./js/main.js"></script>
+</body>
+</html>

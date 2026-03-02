@@ -1,0 +1,242 @@
+/* ==========================================
+   项目详情页 (Detail Page) 专属排版模板 (修复图片裁剪 Bug)
+   ========================================== */
+
+/* 彻底解开主页对高度的锁定，释放滚动条 */
+body, html {
+    overflow-y: auto !important; 
+    height: auto !important; 
+    min-height: 100vh;
+    scroll-behavior: smooth;
+}
+
+/* 隐藏原生滚动条，换上赛博青色定制滚动条 */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+::-webkit-scrollbar-thumb { background: rgba(0, 255, 255, 0.3); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0, 255, 255, 0.6); }
+
+/* 详情页主内容安全区 */
+.detail-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 100px 20px 120px 20px;
+    position: relative;
+    z-index: 10;
+}
+
+/* HUD 风格返回按钮 */
+.hud-back {
+    position: fixed; top: 40px; left: 40px; z-index: 100;
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 10px 20px; background: rgba(0, 26, 34, 0.6);
+    border: 1px solid rgba(0, 255, 255, 0.3); border-radius: 8px;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    color: #00ffff; text-decoration: none;
+    font-size: 0.9rem; letter-spacing: 2px; transition: all 0.3s ease;
+}
+.hud-back:hover { 
+    background: rgba(0, 255, 255, 0.1); 
+    transform: translateX(-5px); 
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2); 
+}
+
+/* --- 头部巨型标题排版 (极致对齐版) --- */
+.project-header { 
+    margin-bottom: 60px; 
+    padding-top: 10vh; 
+    /* 核心修复：启用 Flexbox 强制纵向排列，并把所有元素死死按在左对齐基准线上 */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 10px; /* 给悬浮在左侧的粒子留出旋转的安全距离 */
+}
+
+.massive-title { 
+    font-family: 'Helvetica Neue', Arial, sans-serif; 
+    font-size: 5.5rem; /* 稍微放大，增强视觉冲击 */
+    font-weight: 900;
+    line-height: 1; /* 核心修复：收紧行高，消除字体自带的上下留白导致的视觉偏移 */
+    margin: 0; /* 清除所有默认外边距 */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #ffffff;
+    text-shadow: 0 10px 30px rgba(0, 255, 255, 0.3); 
+    position: relative;
+}
+
+.project-subtitle {
+    /* 核心修复：智能多语言字体栈（英文优先，中文兜底） */
+    font-family: 'Helvetica Neue', Arial, 'ChenSiruo', sans-serif;
+    font-size: 2.2rem;
+    color: #00ffff;
+    margin: 15px 0 0 0;
+    font-weight: 500; /* 英文稍微加粗一点更好看 */
+    opacity: 0.9;
+    letter-spacing: 1px; /* 增加一点英文字距，提升高级感 */
+}
+
+/* 升级为科幻感的信息牌 UI */
+.project-meta { 
+    display: flex; 
+    gap: 15px; 
+    flex-wrap: wrap;
+    margin: 20px 0 0 0; /* 严格控制距离副标题的间距 */
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #aaddff; 
+    font-size: 1rem; 
+    letter-spacing: 1px;
+}
+.project-meta span { 
+    background: rgba(0, 255, 255, 0.05);
+    border: 1px solid rgba(0, 255, 255, 0.2); /* 加上边框，变成标签卡 */
+    padding: 6px 14px;
+    border-radius: 6px;
+}
+
+/* 覆盖全局的 tags 间距，保持与上方相同的规整感 */
+.project-header .tags {
+    margin: 20px 0 0 0; 
+    justify-content: flex-start;
+}
+
+/* 确保内容标题有一个相对定位，供雷达粒子捕捉 */
+.content-title { position: relative; }
+
+/* --- 核心视觉展示区 (宽幅 Banner) --- */
+.hero-media {
+    width: 100%; aspect-ratio: 16/9;
+    background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px; margin-bottom: 60px; overflow: hidden;
+    display: flex; justify-content: center; align-items: center;
+    color: rgba(255,255,255,0.3); font-size: 1.2rem; letter-spacing: 5px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+.hero-media img, .hero-media video { width: 100%; height: 100%; object-fit: cover; }
+
+/* ==========================================
+   美术资产与大图展示专区 ( added in a previous turn)
+   ========================================== */
+
+/* 保护像素画的绝对锐利！禁止浏览器模糊处理 */
+.pixel-art {
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -o-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
+    width: 100%;
+    max-width: 150px; /* 控制动图的显示大小 */
+    height: auto;
+    display: block;
+    margin: 0 auto 15px auto;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); /* 给透明底色的GIF加一点悬浮阴影 */
+}
+
+/* 一页企划书展示图 */
+.showcase-img {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease;
+}
+.showcase-img:hover {
+    transform: scale(1.02);
+    border-color: rgba(0, 255, 255, 0.4);
+}
+
+/* 角色动画三列网格 */
+.character-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 自适应列数，手机上自动变单列 */
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.character-card {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 30px 20px;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.character-card:hover {
+    background: rgba(0, 255, 255, 0.05);
+    transform: translateY(-5px);
+    border-color: rgba(0, 255, 255, 0.4);
+    box-shadow: 0 10px 25px rgba(0, 255, 255, 0.1);
+}
+.character-card p {
+    margin: 0;
+    color: #00ffff;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    text-transform: uppercase;
+}
+
+/* --- 正文模块与文字排版 --- */
+.content-block {
+    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-radius: 16px; padding: 40px; margin-bottom: 40px;
+}
+.content-title {
+    font-size: 1.2rem; color: #00ffff; letter-spacing: 3px;
+    margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid rgba(0,255,255,0.2);
+    padding-bottom: 10px; display: flex; align-items: center; gap: 10px;
+}
+.content-title::before { content: '■'; font-size: 0.8rem; }
+
+.content-body p { line-height: 1.8; color: #d0e0f0; font-size: 1.05rem; margin-bottom: 20px; }
+.content-body ul { color: #d0e0f0; line-height: 1.8; font-size: 1.05rem; padding-left: 20px; }
+.content-body li { margin-bottom: 10px; }
+
+/* 高亮关键数据 (如配置时间压缩至20分钟) */
+.highlight { 
+    color: #fff; background: rgba(0, 255, 255, 0.15); 
+    padding: 2px 6px; border-radius: 4px; border-bottom: 1px solid #00ffff; 
+}
+
+/* ==========================================
+   ⛵ Sailors 详情页专属图片排版 (核心 Bug 修复)
+   ========================================== */
+
+/* 并排的多图展示区网格 */
+.media-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 30px; 
+    margin-top: 30px; 
+    align-items: start; /* 确保高度不一的图片不会拉伸 */
+}
+
+/* --- 核心修复：极致的“全画幅模式”图片排版 --- */
+.sailors-hero-img, 
+.sailors-card-img {
+    width: 100%; /* 宽度占满父容器 */
+    height: auto !important; /* <--- 终极修复：绝对不要写死高度！让高度随比例自由拉伸 */
+    object-fit: contain !important; /* <--- 终极修复：确保整张图都在盒子内，绝对不剪裁 */
+    display: block;
+    margin: 0;
+    border-radius: 12px;
+}
+
+/* 顶部全景 Banner 的科幻感边框与阴影 */
+.sailors-hero-img {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+
+/* 战舰卡牌的悬浮发光样式 */
+.sailors-card-img {
+    transition: all 0.3s ease;
+}
+.sailors-card-img:hover {
+    transform: scale(1.03) translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 255, 255, 0.2);
+}
+
+.bottom-spacer { height: 40px; }

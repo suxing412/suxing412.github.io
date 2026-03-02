@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Dualing Drivers - 苏省 XingSu</title>
+    <link rel="stylesheet" href="./CSS/style.css">
+    <link rel="stylesheet" href="./CSS/detail.css">
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <a href="index.html" class="hud-back">← BACK TO HUB</a>
+
+    <div class="detail-container">
+        
+        <div class="project-header">
+            <h1 class="massive-title" style="font-size: 4rem;">DUALING DRIVERS</h1>
+            <h2 class="project-subtitle">2D 像素双人坦克对抗与关卡编辑器</h2>
+            <div class="project-meta">
+                <span>2024.01 - 2024.05</span>
+                <span>5人团队</span>
+                <span>玩法策划 & 程序实现</span>
+            </div>
+            <div class="tags" style="justify-content: flex-start;">
+                <span>Controller Input</span><span>Level Editor</span><span>JSON 读写</span><span>C# / Unity</span>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <img src="./images/tank-gameplay.png" alt="游戏实机画面" class="sailors-hero-img">
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">01. GAME FEEL // 拟真与街机：双轨驾驶模型</h2>
+            <div class="content-body" style="margin-bottom: 30px;">
+                <p>为了同时满足休闲玩家与硬核玩家的需求，我设计并用 C# 实现了两套截然不同的手柄底层输入逻辑：</p>
+                <ul>
+                    <li><strong>街机模式 (Arcade)：</strong> 采用绝对方向映射，左摇杆直接控制坦克移动方向，极大地降低了新手的上手门槛。</li>
+                    <li><strong>拟真履带模式 (Simulation)：</strong> 深度模拟真实坦克驾驶体验。左摇杆控制左侧履带，右摇杆控制右侧履带。极具机械感的操作逻辑为核心玩家提供了巨大的操作上限与沉浸感。</li>
+                </ul>
+            </div>
+            <div class="content-block" style="border: none; background: none; padding: 0; margin: 0;">
+                <img src="./images/tank-controls.png" alt="游戏操控设置页面" class="sailors-card-img">
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">02. LEVEL EDITOR // JSON 读写与 UGC 开放</h2>
+            <div class="content-body" style="margin-bottom: 30px;">
+                <p>开放玩家 UGC（用户生成内容）是我们拓展游戏寿命的核心策略。我为此开发了内置的网格地图编辑器。</p>
+                <ul>
+                    <li><strong>自定义地图搭建：</strong> 支持放置陆地、水面（减速/不可通行）、可破坏墙壁（提供战术掩体）与不可破坏墙壁。</li>
+                    <li><strong>数据序列化：</strong> 实现了地图数据的本地存取功能。玩家绘制的地图可以被序列化保存为独立文件，并在主菜单中随时被重新读取和加载。</li>
+                </ul>
+            </div>
+            <div class="content-block" style="border: none; background: none; padding: 0; margin: 0;">
+                <img src="./images/tank-editor.png" alt="关卡编辑器界面" class="sailors-card-img">
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">03. PROGRESSION // 关卡体系与内容广度</h2>
+            <div class="content-body" style="margin-bottom: 30px;">
+                <p>除了功能强大的编辑器，游戏本身也内置了数个设计精良的官方关卡。选关界面不仅管理着官方关卡，也充当着读取玩家自定义地图文件的集线器（Hub）。</p>
+                <ul>
+                    <li><strong>官方关卡：</strong> 每个关卡都有独特的地形博弈与道具（加速、修复、弹夹增幅）生成点布局。</li>
+                    <li><strong>无限重玩：</strong> 编辑器与选关系统的打通，让 Dualing Drivers 拥有了无限的游戏可能性。</li>
+                </ul>
+            </div>
+            <div class="content-block" style="border: none; background: none; padding: 0; margin: 0;">
+                <img src="./images/tank-level-select.png" alt="游戏关卡选关界面" class="sailors-card-img">
+            </div>
+        </div>
+
+    </div>
+
+    <script src="./js/main.js"></script>
+</body>
+</html>
