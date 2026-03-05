@@ -27,26 +27,28 @@ body, html {
 .column span:hover { transform: scale(1.4) !important; text-shadow: 0 0 35px rgba(255, 255, 255, 1); z-index: 10; }
 .shine { color: #ffffff; text-shadow: 0 0 25px rgba(180, 255, 255, 0.8); }
 
-/* HUD 抽屉系统 */
+/* --- HUD 常驻抽屉系统 (取消悬停与隐藏) --- */
 .drawer {
     position: fixed; top: 0; height: 100vh; 
     display: flex; z-index: 50;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); 
 }
+/* 核心修改：直接固定在两侧，不使用负数 translateX 隐藏 */
+.drawer.left { left: 0; flex-direction: row; }
+.drawer.right { right: 0; flex-direction: row; }
+
 .drawer-content {
-    /* 核心修改：锁定为屏幕宽度的 1/3 */
+    /* 核心修改：精确锁定为屏幕宽度的 1/3 */
     width: 33.33vw; 
-    min-width: 380px; /* 防止在小屏幕上缩得太窄 */
-    max-width: 800px; /* 防止在超宽屏上拉得太开 */
+    min-width: 380px; 
+    max-width: 800px; 
     height: 100%;
-    background: rgba(0, 26, 34, 0.7); /* 稍微加深底色，增加厚重感 */
-    backdrop-filter: blur(30px); /* 强化毛玻璃，减少背景干扰 */
+    background: rgba(0, 26, 34, 0.75); 
+    backdrop-filter: blur(30px);
     -webkit-backdrop-filter: blur(30px);
     border-left: 1px solid rgba(255,255,255,0.1); 
     border-right: 1px solid rgba(255,255,255,0.1);
-    
-    /* 增加内边距，让内容更有“呼吸感” */
-    padding: 80px 50px; 
+    /* 增加内边距，让内容更有呼吸感 */
+    padding: 80px 45px; 
     box-sizing: border-box;
     overflow-y: auto; 
     box-shadow: 0 0 60px rgba(0,0,0,0.5);
@@ -58,55 +60,52 @@ body, html {
 .drawer-content::-webkit-scrollbar-thumb { background: rgba(0, 255, 255, 0.2); border-radius: 10px; transition: background 0.3s; }
 .drawer-content::-webkit-scrollbar-thumb:hover { background: rgba(0, 255, 255, 0.5); }
 
+/* 侧边边界栏（现仅作为边界装饰，删除了箭头与交互效果） */
 .drawer-tab {
-    position: relative;
-    width: 50px; height: 100vh;
-    background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);
+    width: 40px; height: 100vh;
+    background: rgba(255, 255, 255, 0.03); 
     display: flex; flex-direction: column; justify-content: center; align-items: center;
-    cursor: pointer; transition: background 0.3s;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: none;
+    cursor: default; 
 }
-.drawer-tab:hover { background: rgba(255, 255, 255, 0.15); }
 .tab-text {
     writing-mode: vertical-rl; transform: rotate(180deg);
-    letter-spacing: 5px; font-weight: 300; font-size: 1.1rem;
-    color: #aaddff; text-shadow: 0 0 10px rgba(0,255,255,0.3);
+    letter-spacing: 5px; font-weight: 300; font-size: 0.9rem;
+    color: rgba(170, 221, 255, 0.4); 
+    text-shadow: 0 0 10px rgba(0,255,255,0.1);
 }
-
-/* 视觉引导箭头 (HUD 指示器) */
-.drawer-tab::after {
-    position: absolute; top: 50%; font-size: 1.5rem; color: #00ffff;
-    pointer-events: none; transition: opacity 0.3s ease;
-}
-.drawer.left { left: 0; transform: translateX(calc(-100% + 50px)); flex-direction: row; }
-.drawer.left .drawer-tab::after { content: '》'; right: -35px; animation: pulseLeft 2s infinite ease-in-out; }
-.drawer.left:hover { transform: translateX(0); } 
-.drawer.left .drawer-tab { border-left: none; }
-
-.drawer.right { right: 0; transform: translateX(calc(100% - 50px)); flex-direction: row; }
-.drawer.right .drawer-tab::after { content: '《'; left: -35px; animation: pulseRight 2s infinite ease-in-out; }
-.drawer.right:hover { transform: translateX(0); }
-.drawer.right .drawer-tab { border-right: none; }
 .drawer.right .tab-text { transform: none; } 
 
-.drawer:hover .drawer-tab::after { opacity: 0 !important; animation: none; }
-
-@keyframes pulseLeft { 0%, 100% { opacity: 0.2; transform: translateY(-50%) translateX(0); } 50% { opacity: 0.9; transform: translateY(-50%) translateX(6px); text-shadow: 0 0 15px rgba(0,255,255,0.8); } }
-@keyframes pulseRight { 0%, 100% { opacity: 0.2; transform: translateY(-50%) translateX(0); } 50% { opacity: 0.9; transform: translateY(-50%) translateX(-6px); text-shadow: 0 0 15px rgba(0,255,255,0.8); } }
-
-/* 移动端适配 */
+/* 移动端适配：取消固定定位，变为垂直流动堆叠 */
 @media (max-width: 768px) {
-    .drawer.left { right: 0; left: auto; flex-direction: row-reverse; transform: translateX(calc(100% - 50px)); height: 50vh; top: 0; }
-    .drawer.right { height: 50vh; top: 50vh; }
-    .drawer-content { width: 85vw; min-width: auto; }
-    .drawer-tab { height: 50vh; }
-    .drawer.left .drawer-tab::after { content: '《'; right: auto; left: -35px; animation: pulseRight 2s infinite ease-in-out; }
-    .drawer.left:hover, .drawer.right:hover { transform: translateX(0); }
+    body, html { overflow-y: auto; height: auto; }
+    .hero { position: relative; height: 50vh; }
+    .drawer { position: relative; height: auto; width: 100%; display: block; }
+    .drawer-content { width: 100%; min-width: auto; max-width: none; padding: 40px 20px; border-left: none; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .drawer-tab { display: none; }
 }
 
 /* 内部排版与图片处理 */
 .section-title { font-size: 1.3rem; letter-spacing: 4px; opacity: 0.9; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; }
-.profile-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 30px; margin-bottom: 30px; }
+
+/* 档案卡片排版升级 */
+.profile-card { 
+    background: rgba(255,255,255,0.03); 
+    border: 1px solid rgba(255,255,255,0.1); 
+    border-radius: 16px; 
+    padding: 35px; 
+    margin-bottom: 40px; 
+    transition: background 0.3s;
+}
+.profile-card:hover {
+    background: rgba(255,255,255,0.06);
+}
+.profile-card p {
+    font-size: 1.05rem; 
+    line-height: 1.8;
+    color: #e0f0ff;
+    text-align: justify; /* 两端对齐，消除空洞感 */
+}
 
 /* 你的肖像图片样式 */
 .about-grid { display: grid; grid-template-columns: 100px 1fr; gap: 30px; align-items: center; }
@@ -118,7 +117,7 @@ body, html {
 .glass-card::after { content: '→'; position: absolute; right: 20px; top: 50%; transform: translateY(-50%) translateX(10px); font-size: 1.5rem; opacity: 0; transition: all 0.3s; color: #00ffff; }
 .project-link:hover .glass-card::after { opacity: 1; transform: translateY(-50%) translateX(0); }
 
-/* --- 卡片内部排版精调 (标题 -> 标签 -> 简介) --- */
+/* --- 卡片内部排版精调 --- */
 .glass-card h3 { 
     margin: 0 0 12px 0; 
     font-size: 1.3rem; 
@@ -127,7 +126,6 @@ body, html {
     text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-/* 核心修复：删掉前面的 .glass-card，让左侧的技能栏也能用这套排版 */
 .tags { 
     display: flex; 
     gap: 8px; 
@@ -135,7 +133,6 @@ body, html {
     margin-bottom: 15px; 
 }
 
-/* 核心修复：同上，解放作用域 */
 .tags span { 
     font-size: 0.7rem; 
     padding: 4px 10px; 
@@ -154,3 +151,74 @@ body, html {
 }
 
 .bottom-spacer { height: 40px; }
+
+/* ==========================================
+   响应式与多端适配 (Cross-Device Responsive System)
+   ========================================== */
+
+/* 1. 小屏笔记本 & iPad 横屏 (Landscape) 适配 */
+@media (max-width: 1100px) {
+    /* 核心修复：缩小两侧面板宽度，给中间留出足够大的舞台 */
+    .drawer-content { 
+        width: 30vw !important; /* 面板只占 30% */
+        min-width: 280px !important; /* 降低最小宽度限制，防挤压 */
+        padding: 60px 25px; 
+    }
+    .column { font-size: 4rem; } 
+}
+
+/* 2. iPad 竖屏 (Portrait) & 手机终端 沉浸式适配 */
+/* 将断点从 768px 提高到 850px，完美覆盖所有型号的 iPad 竖屏 */
+@media (max-width: 850px) {
+    /* 释放机身高度锁定，允许自然滚动 */
+    body, html { overflow-y: auto !important; height: auto !important; display: block; }
+    
+    /* 诗词变成全局固定的底层背景 */
+    .hero { 
+        position: fixed !important; 
+        top: 0; left: 0;
+        height: 100vh !important; 
+        perspective: 800px; 
+        z-index: 1; 
+        pointer-events: none; 
+    }
+    
+    /* 根据屏幕比例动态调整诗词大小和间距 */
+    .container { gap: 10vw; margin-left: -20px; }
+    .column { font-size: 20vw; } 
+
+    /* 面板容器设定 */
+    .drawer { 
+        position: relative; height: auto; width: 100%; 
+        display: block; 
+        z-index: 50; 
+    }
+    /* 取消左右常驻，变成上下堆叠 */
+    .drawer.left, .drawer.right { left: 0; right: 0; transform: none; }
+    
+    /* 让第一个面板向下推，一进网页能看到大片诗词 */
+    .drawer.left { margin-top: 55vh; }
+
+    /* 半透明沉浸式毛玻璃效果 */
+    .drawer-content { 
+        width: 100% !important; min-width: 100% !important; max-width: 100% !important;
+        padding: 40px 20px; 
+        border: none; 
+        border-top: 1px solid rgba(255,255,255,0.1); 
+        box-shadow: none;
+        background: rgba(0, 26, 34, 0.45) !important; 
+        backdrop-filter: blur(8px) !important; 
+        -webkit-backdrop-filter: blur(8px) !important;
+    }
+
+    /* 头像与名字居中 */
+    .about-grid { 
+        grid-template-columns: 1fr; text-align: center; justify-items: center; gap: 15px;
+    }
+
+    /* 给栏目标题左侧留出星星飞舞的绝对安全区 */
+    .section-title {
+        padding-left: 45px; 
+        position: relative;
+    }
+}

@@ -20,52 +20,19 @@ function resize() { canvas.width = window.innerWidth; canvas.height = window.inn
 window.addEventListener('resize', resize);
 resize();
 
-// 3. 核心交互变量：全局引力场与状态
+// 3. 核心交互变量：只保留全局鼠标坐标
 let mouseX = window.innerWidth / 2;
 let mouseY = window.innerHeight / 2 + 50; 
-let isLeftDrawerOpen = false;
-let isRightDrawerOpen = false;
 
-// 鼠标实时跟踪 (主页使用)
+// 鼠标实时跟踪 (现在仅用于双星雷达，彻底去除了导致卡顿的 3D 诗词跟踪)
 window.addEventListener('mousemove', (e) => { 
     mouseX = e.clientX; 
     mouseY = e.clientY; 
-    if(container) updateContainerPhysics(); 
 });
 
-// 4. 主页：侧边栏引力劫持
-const leftDrawer = document.getElementById('left-drawer');
-const rightDrawer = document.getElementById('right-drawer');
-let leftTab = null, rightTab = null;
-
-if (leftDrawer && rightDrawer) {
-    leftTab = leftDrawer.querySelector('.drawer-tab');
-    rightTab = rightDrawer.querySelector('.drawer-tab');
-
-    leftDrawer.addEventListener('mouseenter', () => { isLeftDrawerOpen = true; updateContainerPhysics(); });
-    leftDrawer.addEventListener('mouseleave', () => { isLeftDrawerOpen = false; updateContainerPhysics(); });
-    rightDrawer.addEventListener('mouseenter', () => { isRightDrawerOpen = true; updateContainerPhysics(); });
-    rightDrawer.addEventListener('mouseleave', () => { isRightDrawerOpen = false; updateContainerPhysics(); });
-}
-
-// 5. 3D 诗词视角控制
-function updateContainerPhysics() {
-    if (!container) return;
-    if (isLeftDrawerOpen) {
-        container.style.transform = `translate3d(100px, 0, 0) rotateX(0deg) rotateY(-25deg)`;
-    } else if (isRightDrawerOpen) {
-        container.style.transform = `translate3d(-100px, 0, 0) rotateX(0deg) rotateY(25deg)`;
-    } else {
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
-        const percentX = (mouseX - centerX) / centerX;
-        const percentY = (mouseY - centerY) / centerY;
-        container.style.transform = `translate3d(${percentX * 40}px, ${percentY * 40}px, 0) rotateX(${-percentY * 18}deg) rotateY(${percentX * 18}deg)`;
-    }
-}
 
 // ==========================================
-// 6. 动力学引擎：李萨如双星 + 流星拖尾
+// 4. 动力学引擎：李萨如双星 + 流星拖尾
 // ==========================================
 let p1 = { x: window.innerWidth / 2, y: window.innerHeight / 2, vx: 0, vy: 0, radius: 5, history: [] };
 let p2 = { x: window.innerWidth / 2, y: window.innerHeight / 2, vx: 0, vy: 0, radius: 4, history: [] };
@@ -73,7 +40,6 @@ let trailX = window.innerWidth / 2;
 let trailY = window.innerHeight / 2;
 let time = 0;
 
-// 新增：记录上一帧的滚动位置和吸引目标
 let lastScrollY = window.scrollY || 0;
 let lastAttractor = null;
 
@@ -105,86 +71,100 @@ function updatePhysics(p, targetX, targetY, isLight, isAnchored) {
     if (p.history.length > 25) p.history.pop();
 }
 
+// 实体圆润线段渲染方式
 function drawTrail(p, rgbString) {
-    for (let i = 0; i < p.history.length; i++) {
-        let pt = p.history[i];
+    if (p.history.length < 2) return; 
+    
+    for (let i = 0; i < p.history.length - 1; i++) {
+        let pt1 = p.history[i];
+        let pt2 = p.history[i+1];
+        
         let alpha = (1 - i / p.history.length) * 0.4; 
-        let size = p.radius * (1 - (i / p.history.length) * 0.8); 
+        let size = p.radius * (1 - (i / p.history.length) * 0.8) * 2; 
+        
         ctx.beginPath();
-        ctx.arc(pt.x, pt.y, size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${rgbString}, ${alpha})`;
-        ctx.fill();
+        ctx.moveTo(pt1.x, pt1.y);
+        ctx.lineTo(pt2.x, pt2.y);
+        ctx.strokeStyle = `rgba(${rgbString}, ${alpha})`;
+        ctx.lineWidth = size;
+        ctx.lineCap = 'round'; 
+        ctx.stroke();
     }
 }
 
-// 获取详情页所有的标题元素
-const contentTitles = document.querySelectorAll('.content-title, .massive-title');
+// 🚨 性能优化版：带设备断点感知的雷达扫描逻辑 🚨
+let currentAttractor = null; 
 
-// 7. 动画主循环 (搭载滚动视差补偿系统)
+function scanForAttractor() {
+    // 动态决定扫描目标：详情页的标题始终扫描；
+    // 主页的 .section-title 只有在手机/竖屏 iPad (<= 850px) 时才被扫描
+    let selector = '.content-title, .massive-title';
+    if (window.innerWidth <= 850) {
+        selector += ', .section-title';
+    }
+    
+    const activeTitles = document.querySelectorAll(selector);
+    
+    // 如果当前屏幕模式下没有合法目标（比如电脑端的主页），立刻释放吸附，跟随鼠标
+    if (activeTitles.length === 0) {
+        currentAttractor = null;
+        return;
+    }
+
+    let minDiff = Infinity;
+    const readingLine = window.innerHeight * 0.35; 
+    let newAttractor = null;
+    
+    activeTitles.forEach(title => {
+        const rect = title.getBoundingClientRect();
+        const diff = Math.abs(rect.top - readingLine);
+        if (diff < minDiff) { minDiff = diff; newAttractor = title; }
+    });
+    
+    currentAttractor = newAttractor;
+}
+
+scanForAttractor();
+window.addEventListener('scroll', scanForAttractor, { passive: true });
+window.addEventListener('resize', scanForAttractor, { passive: true });
+
+// 5. 动画主循环
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    time += 0.02;
     
-    // --- 核心修复 1：计算这一帧的真实滚动位移 ---
+    time += 0.02;
     let currentScrollY = window.scrollY || 0;
     let scrollDelta = currentScrollY - lastScrollY;
     lastScrollY = currentScrollY;
-    
     let isAnchored = false;
-    let currentAttractor = null;
 
-    // --- 雷达扫描 ---
-    if (isLeftDrawerOpen && leftTab) {
-        currentAttractor = leftTab;
-    } else if (isRightDrawerOpen && rightTab) {
-        currentAttractor = rightTab;
-    } else if (contentTitles.length > 0) {
-        let minDiff = Infinity;
-        const readingLine = window.innerHeight * 0.35; 
-        
-        contentTitles.forEach(title => {
-            const rect = title.getBoundingClientRect();
-            const diff = Math.abs(rect.top - readingLine);
-            if (diff < minDiff) {
-                minDiff = diff;
-                currentAttractor = title;
-            }
-        });
-    }
-
-    // --- 核心修复 2：绝对锁定补偿！消除所有拉扯感 ---
-    // 如果我们仍然锁定在同一个标题上，且页面发生了滚动
     if (currentAttractor && currentAttractor === lastAttractor && scrollDelta !== 0) {
-        // 把滚动的像素差直接补偿给整个物理系统，抵消由于 DOM 瞬间移动造成的相对位移
         trailY -= scrollDelta;
         p1.y -= scrollDelta;
         p2.y -= scrollDelta;
-        // 把拖尾的历史轨迹也一起平移，防止拖尾被拉长
         p1.history.forEach(pt => pt.y -= scrollDelta);
         p2.history.forEach(pt => pt.y -= scrollDelta);
     }
     lastAttractor = currentAttractor;
 
-    // --- 引力场结算 ---
     if (currentAttractor) {
         const rect = currentAttractor.getBoundingClientRect();
         isAnchored = true;
         
-        if (currentAttractor.classList.contains('drawer-tab')) {
-            const isLeft = currentAttractor.parentElement.classList.contains('left');
-            trailX += ((isLeft ? rect.right + 25 : rect.left - 25) - trailX) * 0.15;
-            trailY += ((rect.top + rect.height / 2) - trailY) * 0.15;
+        // 将安全判定界限同步改为 850px，与 iPad 竖屏布局一致
+        if (window.innerWidth <= 850) {
+            trailX += (35 - trailX) * 0.12;
+            trailY += ((rect.top + rect.height / 2) - trailY) * 0.12;
         } else {
-            // 既然滚动滞后已经被补偿解决，这里的飞行追踪系数可以稍微提高到 0.12，让跃迁更干脆
             trailX += ((rect.left - 40) - trailX) * 0.12; 
             trailY += ((rect.top + rect.height / 2) - trailY) * 0.12;
         }
     } else {
+        // 解放后的自由模式：完美跟随鼠标
         trailX += (mouseX - trailX) * 0.06;
         trailY += (mouseY - trailY) * 0.06;
     }
 
-    // 更新物理并绘制
     updatePhysics(p1, trailX, trailY, true, isAnchored);
     updatePhysics(p2, trailX, trailY, false, isAnchored);
 
@@ -212,7 +192,7 @@ function animate() {
 animate();
 
 // ==========================================
-// 8. 动态渲染项目卡片系统
+// 6. 动态渲染项目卡片系统
 // ==========================================
 function renderProjects() {
     const container = document.getElementById('project-list-container');
