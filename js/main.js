@@ -215,3 +215,41 @@ function renderProjects() {
     container.innerHTML = htmlContent;
 }
 renderProjects();
+
+// ==========================================
+// 8. 全屏大图查看器系统 (Lightbox)
+// ==========================================
+function initLightbox() {
+    // 1. 动态在网页底层创建一个“暗房”容器，免去修改 HTML 的麻烦
+    const overlay = document.createElement('div');
+    overlay.className = 'lightbox-overlay';
+    const img = document.createElement('img');
+    img.className = 'lightbox-img';
+    overlay.appendChild(img);
+    document.body.appendChild(overlay);
+
+    // 2. 自动搜捕页面上所有的展示图
+    const images = document.querySelectorAll('.sailors-hero-img, .showcase-img, .pixel-art');
+    
+    // 3. 为它们绑定点击放大事件
+    images.forEach(image => {
+        image.addEventListener('click', () => {
+            img.src = image.src; // 把被点击的图片地址塞进暗房
+            overlay.classList.add('active'); // 开灯
+        });
+    });
+
+    // 4. 点击暗房任意区域即可关闭
+    overlay.addEventListener('click', () => {
+        overlay.classList.remove('active');
+        // 延迟清空图片地址，保证淡出动画丝滑
+        setTimeout(() => { if(!overlay.classList.contains('active')) img.src = ''; }, 300);
+    });
+}
+
+// 确保网页完全加载后激活系统
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLightbox);
+} else {
+    initLightbox();
+}

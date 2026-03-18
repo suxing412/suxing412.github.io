@@ -273,3 +273,95 @@ body, html {
     .media-grid { grid-template-columns: 1fr; gap: 20px; }
     .character-grid { grid-template-columns: 1fr; }
 }
+
+/* ==========================================
+   全屏大图查看器 (Lightbox System)
+   ========================================== */
+.lightbox-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+    background: rgba(0, 15, 20, 0.95); /* 极深的赛博青底色 */
+    backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+    z-index: 99999; /* 确保在所有元素的最上层 */
+    display: flex; justify-content: center; align-items: center;
+    opacity: 0; visibility: hidden;
+    transition: all 0.3s ease;
+    cursor: zoom-out; /* 提示点击即可退出 */
+}
+
+.lightbox-overlay.active {
+    opacity: 1; visibility: visible;
+}
+
+.lightbox-img {
+    max-width: 95vw; max-height: 95vh; /* 确保图片完整显示在屏幕内 */
+    border-radius: 8px;
+    box-shadow: 0 0 50px rgba(0, 255, 255, 0.15);
+    transform: scale(0.95);
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.lightbox-overlay.active .lightbox-img {
+    transform: scale(1);
+}
+
+/* 给网页里所有的大图加上“可放大”的鼠标指针提示 */
+.sailors-hero-img, .showcase-img, .pixel-art {
+    cursor: zoom-in;
+}
+
+/* ==========================================
+   项目页尾部链接区 (Project Footer CTA)
+   ========================================== */
+.project-footer {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+}
+
+.footer-title {
+    font-size: 1.1rem;
+    color: #aaddff;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin: 0;
+    opacity: 0.8;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* 赛博朋克风发光按钮 */
+.footer-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 28px;
+    background: rgba(0, 255, 255, 0.05);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 8px;
+    color: #00ffff;
+    text-decoration: none;
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.footer-btn:hover {
+    background: rgba(0, 255, 255, 0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 255, 255, 0.2);
+    border-color: #00ffff;
+    color: #ffffff;
+}

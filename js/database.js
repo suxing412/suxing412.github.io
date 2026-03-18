@@ -19,6 +19,12 @@ const portfolioData = {
             tags: ["Prototype", "Controller Input", "Level Editor"],
             desc: "硬核 2D 像素双人坦克对抗。独立实现拟真履带（双摇杆驱动）与街机双轨驾驶模型，并开发了支持文件读写的自定义关卡编辑器。",
             link: "tank-battle.html" 
+        },
+        {
+            title: "CK3系统拆解",
+            tags: ["System Teardown", "Reverse Engineering", "Core Loop"],
+            desc: "对P社大战略游戏《十字军之王3》的底层架构进行逆向工程。全面解构法理、经济、密谋与压力系统，探寻 SLG 与 RPG 结合的动态生态平衡机制。",
+            link: "ck3-teardown.html" 
         }
     ]
 };

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CK3 System Teardown - 苏省 XingSu</title>
+    <link rel="stylesheet" href="./CSS/style.css">
+    <link rel="stylesheet" href="./CSS/detail.css">
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <a href="index.html" class="hud-back">← BACK TO HUB</a>
+
+    <div class="detail-container">
+        
+        <div class="project-header">
+            <h1 class="massive-title" style="font-size: clamp(2.2rem, 10vw, 4.5rem) !important;">CRUSADER KINGS 3</h1>
+            <h2 class="project-subtitle">系统拆解与底层架构分析</h2>
+            <div class="project-meta">
+                <span>Personal Project</span>
+                <span>System Design</span>
+                <span>Reverse Engineering</span>
+            </div>
+            <div class="tags" style="justify-content: flex-start;">
+                <span>大战略 SLG</span><span>实体架构 (Entity)</span><span>资源循环</span><span>状态机设计</span>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">01. OVERVIEW // 项目概述</h2>
+            <div class="content-body" style="margin-bottom: 30px;">
+                <p>《十字军之王3》(CK3) 是一款包含复杂动态系统的沙盒战略游戏。本项目的目标是对其底层架构进行逆向工程分析，梳理法理、经济、军事、密谋与压力等多维系统是如何协同运转的。</p>
+                <p>本拆解案的核心观点在于：CK3 维持游戏寿命的关键在于其“动态平衡系统”。玩家的扩张与发展，最终都需要在寿命倒计时中，用来维持权力结构与宗族的存续。</p>
+            </div>
+            <img src="./images/1-0.png" alt="封面" class="sailors-hero-img" style="margin-bottom: 20px;">
+            <img src="./images/1-1.png" alt="项目概述与核心观点" class="sailors-hero-img">
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">02. METHODOLOGY // 拆解逻辑与制图规范</h2>
+            <div class="content-body" style="margin-bottom: 30px;">
+                <p>为了清晰地呈现庞大的系统，拆解工作分为四个执行阶段：宏观实体关系解耦、核心循环架构确立、各个子系统深拆、以及继承与版图重置分析。</p>
+                <p>同时，我制定了统一的图例规范。通过区分“资源池”、“内阁职位”、“实体卡片”以及明确的连线逻辑（如绝对持有线、法理从属线），确保整个系统图谱在逻辑上严密且可读。</p>
+            </div>
+            <img src="./images/1-2.png" alt="拆解管线" class="sailors-hero-img" style="margin-bottom: 20px;">
+            <img src="./images/1-3.png" alt="系统拆解规范" class="sailors-hero-img">
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">03. ARCHITECTURE // 实体关系与核心循环</h2>
+            <div class="content-body" style="margin-bottom: 30px;">
+                <p>在宏观层面，游戏的主要实体被解耦为：角色、头衔与宣称。它们之间的持有与附庸关系构成了游戏权力的基础网络。</p>
+                <p>在核心循环上，游戏依赖于内阁、密谋、战争等模块产出资源与头衔，而玩家代理人则需要不断处理这些系统带来的副作用（如派系反叛与压力积累）。</p>
+            </div>
+            <img src="./images/1-4.png" alt="宏观实体关系图" class="sailors-hero-img" style="margin-bottom: 20px;">
+            <img src="./images/1-5.png" alt="全系统核心运转图" class="sailors-hero-img">
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">04. SUBSYSTEMS // 核心子系统拆解</h2>
+            <div class="content-body" style="margin-bottom: 30px;">
+                <p>这一部分对支撑游戏运转的四个主要子系统进行了独立的状态机与逻辑流拆解：</p>
+                <ul>
+                    <li><strong>经济与建设：</strong> 展示了从底层男爵领到顶级领主的税收与金币流转逻辑。</li>
+                    <li><strong>战争与法理：</strong> 梳理了基于法理宣称的战争发动条件，以及战争结算对资源池的瞬间与持续消耗。</li>
+                    <li><strong>密谋与牵制：</strong> 拆解了阴谋发起的判定条件、成功率演算机制以及阴谋暴露后的连锁反应。</li>
+                    <li><strong>压力状态机：</strong> 展示了性格特质如何影响压力获取，以及各级压力崩溃带来的负面事件分支。</li>
+                </ul>
+            </div>
+            <img src="./images/1-6.png" alt="经济循环与建设系统" class="sailors-hero-img" style="margin-bottom: 20px;">
+            <img src="./images/1-7.png" alt="战争与法理系统" class="sailors-hero-img" style="margin-bottom: 20px;">
+            <img src="./images/1-8.png" alt="密谋与牵制系统" class="sailors-hero-img" style="margin-bottom: 20px;">
+            <img src="./images/1-9.png" alt="压力状态机系统" class="sailors-hero-img">
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">05. SUCCESSION // 版图重置与反噬</h2>
+            <div class="content-body" style="margin-bottom: 30px;">
+                <p>角色死亡是 CK3 中最重要的系统重置节点。在均分继承法下，主控角色死亡会导致领土被强制分割给所有继承人，玩家的实际控制力断崖式下降。这迫使玩家在进入下一个世代后，重新通过战争与密谋来收复失地，完成了整个游戏生命周期的闭环。</p>
+            </div>
+            <img src="./images/1-10.png" alt="版图重置与反噬" class="sailors-hero-img">
+        </div>
+
+        <div class="project-footer">
+            <h3 class="footer-title">ACCESS SECURED // 获取完整文档</h3>
+            <div class="footer-links">
+                <a href="./Demos/苏省-CrusaderKing3-系统拆解.pdf" target="_blank" class="footer-btn">Download PDF ↗</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="./js/main.js"></script>
+</body>
+</html>
