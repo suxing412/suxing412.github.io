@@ -5,6 +5,7 @@ const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 const container = document.getElementById('main-container');
 const allSpans = document.querySelectorAll('.column span');
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // 1. 清理 3D 诗词 Hover 延迟 Bug
 if (allSpans.length > 0) {
@@ -42,6 +43,8 @@ let time = 0;
 
 let lastScrollY = window.scrollY || 0;
 let lastAttractor = null;
+let rafId = null;
+let animationRunning = false;
 
 function updatePhysics(p, targetX, targetY, isLight, isAnchored) {
     let orbitScale = isAnchored ? 0.35 : 1.0; 
@@ -94,6 +97,7 @@ function drawTrail(p, rgbString) {
 
 // 🚨 性能优化版：带设备断点感知的雷达扫描逻辑 🚨
 let currentAttractor = null; 
+let scanQueued = false;
 
 function scanForAttractor() {
     // 动态决定扫描目标：详情页的标题始终扫描；
@@ -125,14 +129,24 @@ function scanForAttractor() {
 }
 
 scanForAttractor();
-window.addEventListener('scroll', scanForAttractor, { passive: true });
-window.addEventListener('resize', scanForAttractor, { passive: true });
+function scheduleAttractorScan() {
+    if (scanQueued) return;
+    scanQueued = true;
+    requestAnimationFrame(() => {
+        scanQueued = false;
+        scanForAttractor();
+    });
+}
+
+window.addEventListener('scroll', scheduleAttractorScan, { passive: true });
+window.addEventListener('resize', scheduleAttractorScan, { passive: true });
 
 // 5. 动画主循环
 function animate() {
+    if (!animationRunning) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    time += 0.02;
+    time += prefersReducedMotion ? 0.01 : 0.02;
     let currentScrollY = window.scrollY || 0;
     let scrollDelta = currentScrollY - lastScrollY;
     lastScrollY = currentScrollY;
@@ -186,10 +200,32 @@ function animate() {
     ctx.fill();
     
     ctx.shadowBlur = 0; 
-    requestAnimationFrame(animate);
+    rafId = requestAnimationFrame(animate);
 }
 
-animate();
+function startAnimation() {
+    if (animationRunning) return;
+    animationRunning = true;
+    animate();
+}
+
+function stopAnimation() {
+    animationRunning = false;
+    if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+    }
+}
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        stopAnimation();
+    } else {
+        startAnimation();
+    }
+});
+
+startAnimation();
 
 // ==========================================
 // 6. 动态渲染项目卡片系统

@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monsterpedia - 苏省 XingSu</title>
+    <meta name="description" content="Monsterpedia 项目复盘：超自然调查与社交博弈系统设计，含架构重构、状态机设计与像素角色表现。">
+    <meta property="og:title" content="Monsterpedia - 苏省 XingSu">
+    <meta property="og:description" content="超自然调查与社交博弈项目，展示系统策划与开发复盘。">
+    <meta property="og:image" content="./images/optimized/one-pager.jpg">
+    <meta property="og:type" content="article">
     <link rel="stylesheet" href="./CSS/style.css">
     <link rel="stylesheet" href="./CSS/detail.css">
 </head>
@@ -30,8 +35,8 @@
 
         <div class="hero-media">
             <video 
-                src="./images/MonsterpediaTrailer.mp4" 
-                autoplay loop muted playsinline controls>
+                src="./images/MonsterpediaTrailer.optimized.mp4" 
+                autoplay loop muted playsinline controls preload="metadata" poster="./images/optimized/one-pager.jpg">
             </video>
         </div>
 
@@ -40,7 +45,7 @@
             <div class="content-body" style="margin-bottom: 25px;">
                 <p>在开发初期，我们通过 One Pager 快速统一了团队的愿景：一款强调线索推理与心理博弈的 2D 点击解谜游戏。</p>
             </div>
-            <img src="./images/one-pager.png" alt="Monsterpedia One Pager" class="showcase-img">
+            <img src="./images/optimized/one-pager.jpg" alt="Monsterpedia One Pager" class="showcase-img" loading="lazy" decoding="async" width="1024" height="768">
         </div>
 
         <div class="content-block">
@@ -74,15 +79,15 @@
             
             <div class="character-grid">
                 <div class="character-card">
-                    <img src="./images/detective_idleCycle.gif" class="pixel-art" alt="Detective">
+                    <img src="./images/detective_idleCycle.gif" class="pixel-art" alt="Detective" loading="lazy" decoding="async" width="160" height="320">
                     <p>Detective (Player)</p>
                 </div>
                 <div class="character-card">
-                    <img src="./images/bartender_idleCycle.gif" class="pixel-art" alt="Bartender">
+                    <img src="./images/bartender_idleCycle.gif" class="pixel-art" alt="Bartender" loading="lazy" decoding="async" width="160" height="320">
                     <p>Bartender (Bystander)</p>
                 </div>
                 <div class="character-card">
-                    <img src="./images/werewolf_idleCycle.gif" class="pixel-art" alt="Werewolf">
+                    <img src="./images/werewolf_idleCycle.gif" class="pixel-art" alt="Werewolf" loading="lazy" decoding="async" width="160" height="320">
                     <p>Werewolf (Suspect)</p>
                 </div>
             </div>
@@ -90,6 +95,6 @@
 
     </div>
 
-    <script src="./js/main.js"></script>
+    <script src="./js/main.js" defer></script>
 </body>
 </html>
