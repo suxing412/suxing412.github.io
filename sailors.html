@@ -9,6 +9,7 @@
     <meta property="og:description" content="展示桌游系统设计、节奏压缩与数值平衡方法。">
     <meta property="og:image" content="./images/sailors-box.jpg">
     <meta property="og:type" content="article">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><rect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%230e1a2b%27/><g stroke=%27%23ffb454%27 stroke-width=%274%27><line x1=%2730%27 y1=%2766%27 x2=%2752%27 y2=%2734%27/><line x1=%2752%27 y1=%2734%27 x2=%2772%27 y2=%2762%27/><line x1=%2730%27 y1=%2766%27 x2=%2772%27 y2=%2762%27/></g><circle cx=%2730%27 cy=%2766%27 r=%278%27 fill=%27%230e1a2b%27 stroke=%27%23ffb454%27 stroke-width=%274%27/><circle cx=%2752%27 cy=%2734%27 r=%278%27 fill=%27%23ffb454%27/><circle cx=%2772%27 cy=%2762%27 r=%278%27 fill=%27%230e1a2b%27 stroke=%27%23ffb454%27 stroke-width=%274%27/></svg>">
     <link rel="stylesheet" href="./CSS/style.css">
     <link rel="stylesheet" href="./CSS/detail.css">
 </head>
@@ -16,7 +17,13 @@
 
     <canvas id="bg-canvas"></canvas>
 
-    <a href="index.html" class="hud-back">← BACK TO HUB</a>
+    <header class="top-nav">
+        <a class="brand" href="./index.html">苏省<span class="brand-role">SYSTEM &amp; LEVEL DESIGNER</span></a>
+        <nav class="nav-links">
+            <a href="./index.html#portfolio">← 返回作品集</a>
+            <a class="nav-resume" href="./Demos/苏省-简历.pdf" target="_blank" rel="noopener noreferrer">简历</a>
+        </nav>
+    </header>
 
     <div class="detail-container">
         
@@ -34,7 +41,7 @@
         </div>
 
         <div class="content-block">
-            <img src="./images/sailors-box.jpg" alt="游戏实体配件箱" class="sailors-hero-img" loading="eager" decoding="async" fetchpriority="high" width="512" height="384">
+            <img src="./images/sailors-box.jpg" alt="游戏实体配件箱" class="detail-hero-img" loading="eager" decoding="async" fetchpriority="high" width="512" height="384">
         </div>
 
         <div class="content-block">
@@ -69,15 +76,28 @@
             
             <div class="media-grid">
                 <div class="content-block">
-                    <img src="./images/optimized/sailors-card-1.jpg" alt="USS Hornet Card" class="sailors-card-img" loading="lazy" decoding="async" width="367" height="512">
+                    <img src="./images/optimized/sailors-card-1.jpg" alt="USS Hornet Card" class="detail-card-img" loading="lazy" decoding="async" width="367" height="512">
                 </div>
                 <div class="content-block">
-                    <img src="./images/optimized/sailors-card-2.jpg" alt="Katsuragi Card" class="sailors-card-img" loading="lazy" decoding="async" width="367" height="512">
+                    <img src="./images/optimized/sailors-card-2.jpg" alt="Katsuragi Card" class="detail-card-img" loading="lazy" decoding="async" width="367" height="512">
                 </div>
             </div>
         </div>
 
+        <div class="project-footer">
+            <h3 class="footer-title">资源与联系</h3>
+            <div class="footer-links">
+                <a href="mailto:xsu217822@gmail.com" class="footer-btn" data-copy="xsu217822@gmail.com">✉ 邮箱联系</a>
+                <a href="./Demos/苏省-简历.pdf" target="_blank" rel="noopener noreferrer" class="footer-btn">简历 PDF ↗</a>
+            </div>
+        </div>
+
     </div>
+
+    <footer class="site-footer">
+        <span>© 2026 苏省 · XING SU</span>
+        <span class="colophon">赠君明月满前溪，直到西湖畔</span>
+    </footer>
 
     <script src="./js/main.js" defer></script>
 </body>

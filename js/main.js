@@ -1,291 +1,297 @@
 // ==========================================
-// 全局引擎初始化
+// 苏省 · 系统蓝图引擎 (Blueprint Engine)
+// 背景节点图 + 导航锚点高亮 + Lightbox + 联系复制
 // ==========================================
 const canvas = document.getElementById('bg-canvas');
-const ctx = canvas.getContext('2d');
-const container = document.getElementById('main-container');
-const allSpans = document.querySelectorAll('.column span');
+const ctx = canvas ? canvas.getContext('2d') : null;
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// 1. 清理 3D 诗词 Hover 延迟 Bug
-if (allSpans.length > 0) {
-    allSpans.forEach((span) => {
-        const order = parseInt(span.getAttribute('data-order'));
-        span.style.transitionDelay = `${order * 0.04}s`;
-        setTimeout(() => { span.style.transitionDelay = '0s'; }, 1200); 
-    });
-}
-
-// 2. 画布自适应
-function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-window.addEventListener('resize', resize);
-resize();
-
-// 3. 核心交互变量：只保留全局鼠标坐标
-let mouseX = window.innerWidth / 2;
-let mouseY = window.innerHeight / 2 + 50; 
-
-// 鼠标实时跟踪 (现在仅用于双星雷达，彻底去除了导致卡顿的 3D 诗词跟踪)
-window.addEventListener('mousemove', (e) => { 
-    mouseX = e.clientX; 
-    mouseY = e.clientY; 
-});
-
-
 // ==========================================
-// 4. 动力学引擎：李萨如双星 + 流星拖尾
+// 1. 背景节点图：漂移节点 + 连线 + 脉冲信号
 // ==========================================
-let p1 = { x: window.innerWidth / 2, y: window.innerHeight / 2, vx: 0, vy: 0, radius: 5, history: [] };
-let p2 = { x: window.innerWidth / 2, y: window.innerHeight / 2, vx: 0, vy: 0, radius: 4, history: [] };
-let trailX = window.innerWidth / 2;
-let trailY = window.innerHeight / 2;
+const LINE_COLOR = 'rgba(146, 180, 222, 0.16)';
+const NODE_STROKE = 'rgba(146, 180, 222, 0.5)';
+const NODE_FILL = '#0e1a2b';
+const ACCENT = 'rgba(255, 180, 84, 0.9)';
+const ACCENT_SOFT = 'rgba(255, 180, 84, 0.45)';
+
+let nodes = [];
+let edges = [];
+let pulses = [];
 let time = 0;
-
-let lastScrollY = window.scrollY || 0;
-let lastAttractor = null;
 let rafId = null;
 let animationRunning = false;
+let mouseX = -9999, mouseY = -9999;
 
-function updatePhysics(p, targetX, targetY, isLight, isAnchored) {
-    let orbitScale = isAnchored ? 0.35 : 1.0; 
-    let speedScale = isAnchored ? 0.5 : 1.0;  
-
-    let freqX = (isLight ? 1.3 : 0.85) * speedScale; 
-    let freqY = (isLight ? 0.9 : 1.25) * speedScale; 
-    let radiusX = (isLight ? 45 : 35) * orbitScale;
-    let radiusY = (isLight ? 30 : 50) * orbitScale;
-    let phase = isLight ? 0 : Math.PI; 
-
-    let ghostX = targetX + Math.sin(time * freqX + phase) * radiusX;
-    let ghostY = targetY + Math.cos(time * freqY + phase) * radiusY;
-
-    let spring = isAnchored ? 0.08 : 0.035; 
-    p.vx += (ghostX - p.x) * spring;
-    p.vy += (ghostY - p.y) * spring;
-
-    let friction = isAnchored ? 0.75 : 0.86; 
-    p.vx *= friction;
-    p.vy *= friction;
-
-    p.x += p.vx;
-    p.y += p.vy;
-
-    p.history.unshift({x: p.x, y: p.y});
-    if (p.history.length > 25) p.history.pop();
+function resizeCanvas() {
+    if (!canvas) return;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 }
 
-// 实体圆润线段渲染方式
-function drawTrail(p, rgbString) {
-    if (p.history.length < 2) return; 
-    
-    for (let i = 0; i < p.history.length - 1; i++) {
-        let pt1 = p.history[i];
-        let pt2 = p.history[i+1];
-        
-        let alpha = (1 - i / p.history.length) * 0.4; 
-        let size = p.radius * (1 - (i / p.history.length) * 0.8) * 2; 
-        
+function buildGraph() {
+    if (!canvas) return;
+    nodes = [];
+    edges = [];
+    pulses = [];
+    const w = canvas.width, h = canvas.height;
+    const count = Math.max(10, Math.min(20, Math.round((w * h) / 90000)));
+
+    // 泊松式撒点：保证节点间最小距离
+    let attempts = 0;
+    while (nodes.length < count && attempts < count * 30) {
+        attempts++;
+        const x = 40 + Math.random() * (w - 80);
+        const y = 40 + Math.random() * (h - 80);
+        if (nodes.every(n => (n.hx - x) ** 2 + (n.hy - y) ** 2 > 150 ** 2)) {
+            nodes.push({
+                hx: x, hy: y, x, y,
+                r: 2.5 + Math.random() * 2,
+                major: Math.random() < 0.22,          // 少数主节点带琥珀环
+                amp: 8 + Math.random() * 16,          // 漂移幅度
+                phase: Math.random() * Math.PI * 2,
+                speed: 0.25 + Math.random() * 0.35
+            });
+        }
+    }
+
+    // 每个节点连向最近的 2 个邻居（去重）
+    const seen = new Set();
+    nodes.forEach((n, i) => {
+        const dists = nodes
+            .map((m, j) => ({ j, d: (n.hx - m.hx) ** 2 + (n.hy - m.hy) ** 2 }))
+            .filter(o => o.j !== i)
+            .sort((a, b) => a.d - b.d)
+            .slice(0, 2);
+        dists.forEach(o => {
+            const key = i < o.j ? `${i}-${o.j}` : `${o.j}-${i}`;
+            if (!seen.has(key)) { seen.add(key); edges.push([i, o.j]); }
+        });
+    });
+}
+
+function spawnPulse() {
+    if (edges.length === 0) return;
+    const edge = edges[Math.floor(Math.random() * edges.length)];
+    pulses.push({ edge, t: 0, speed: 0.006 + Math.random() * 0.006 });
+}
+
+function drawGraph() {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 节点位置：围绕 home 点缓慢漂移 + 鼠标轻微牵引
+    nodes.forEach(n => {
+        n.x = n.hx + Math.sin(time * n.speed + n.phase) * n.amp;
+        n.y = n.hy + Math.cos(time * n.speed * 0.8 + n.phase) * n.amp;
+        const dx = mouseX - n.x, dy = mouseY - n.y;
+        const distSq = dx * dx + dy * dy;
+        if (distSq < 160 * 160) {
+            const pull = (1 - Math.sqrt(distSq) / 160) * 14;
+            n.x += (dx / Math.sqrt(distSq + 1)) * pull;
+            n.y += (dy / Math.sqrt(distSq + 1)) * pull;
+        }
+    });
+
+    // 连线
+    ctx.strokeStyle = LINE_COLOR;
+    ctx.lineWidth = 1;
+    edges.forEach(([a, b]) => {
         ctx.beginPath();
-        ctx.moveTo(pt1.x, pt1.y);
-        ctx.lineTo(pt2.x, pt2.y);
-        ctx.strokeStyle = `rgba(${rgbString}, ${alpha})`;
-        ctx.lineWidth = size;
-        ctx.lineCap = 'round'; 
+        ctx.moveTo(nodes[a].x, nodes[a].y);
+        ctx.lineTo(nodes[b].x, nodes[b].y);
         ctx.stroke();
-    }
-}
-
-// 🚨 性能优化版：带设备断点感知的雷达扫描逻辑 🚨
-let currentAttractor = null; 
-let scanQueued = false;
-
-function scanForAttractor() {
-    // 动态决定扫描目标：详情页的标题始终扫描；
-    // 主页的 .section-title 只有在手机/竖屏 iPad (<= 850px) 时才被扫描
-    let selector = '.content-title, .massive-title';
-    if (window.innerWidth <= 850) {
-        selector += ', .section-title';
-    }
-    
-    const activeTitles = document.querySelectorAll(selector);
-    
-    // 如果当前屏幕模式下没有合法目标（比如电脑端的主页），立刻释放吸附，跟随鼠标
-    if (activeTitles.length === 0) {
-        currentAttractor = null;
-        return;
-    }
-
-    let minDiff = Infinity;
-    const readingLine = window.innerHeight * 0.35; 
-    let newAttractor = null;
-    
-    activeTitles.forEach(title => {
-        const rect = title.getBoundingClientRect();
-        const diff = Math.abs(rect.top - readingLine);
-        if (diff < minDiff) { minDiff = diff; newAttractor = title; }
     });
-    
-    currentAttractor = newAttractor;
-}
 
-scanForAttractor();
-function scheduleAttractorScan() {
-    if (scanQueued) return;
-    scanQueued = true;
-    requestAnimationFrame(() => {
-        scanQueued = false;
-        scanForAttractor();
+    // 脉冲信号：沿边移动的琥珀光点
+    pulses = pulses.filter(p => p.t <= 1);
+    pulses.forEach(p => {
+        p.t += p.speed;
+        const [a, b] = p.edge;
+        const x = nodes[a].x + (nodes[b].x - nodes[a].x) * p.t;
+        const y = nodes[a].y + (nodes[b].y - nodes[a].y) * p.t;
+        ctx.beginPath();
+        ctx.arc(x, y, 2.2, 0, Math.PI * 2);
+        ctx.fillStyle = ACCENT;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = ACCENT;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+    });
+
+    // 节点
+    nodes.forEach(n => {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = NODE_FILL;
+        ctx.strokeStyle = n.major ? ACCENT_SOFT : NODE_STROKE;
+        ctx.lineWidth = n.major ? 1.5 : 1;
+        ctx.fill();
+        ctx.stroke();
+        if (n.major) {
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, n.r + 4, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(255, 180, 84, 0.2)';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
     });
 }
 
-window.addEventListener('scroll', scheduleAttractorScan, { passive: true });
-window.addEventListener('resize', scheduleAttractorScan, { passive: true });
-
-// 5. 动画主循环
 function animate() {
     if (!animationRunning) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    time += prefersReducedMotion ? 0.01 : 0.02;
-    let currentScrollY = window.scrollY || 0;
-    let scrollDelta = currentScrollY - lastScrollY;
-    lastScrollY = currentScrollY;
-    let isAnchored = false;
-
-    if (currentAttractor && currentAttractor === lastAttractor && scrollDelta !== 0) {
-        trailY -= scrollDelta;
-        p1.y -= scrollDelta;
-        p2.y -= scrollDelta;
-        p1.history.forEach(pt => pt.y -= scrollDelta);
-        p2.history.forEach(pt => pt.y -= scrollDelta);
-    }
-    lastAttractor = currentAttractor;
-
-    if (currentAttractor) {
-        const rect = currentAttractor.getBoundingClientRect();
-        isAnchored = true;
-        
-        // 将安全判定界限同步改为 850px，与 iPad 竖屏布局一致
-        if (window.innerWidth <= 850) {
-            trailX += (35 - trailX) * 0.12;
-            trailY += ((rect.top + rect.height / 2) - trailY) * 0.12;
-        } else {
-            trailX += ((rect.left - 40) - trailX) * 0.12; 
-            trailY += ((rect.top + rect.height / 2) - trailY) * 0.12;
-        }
-    } else {
-        // 解放后的自由模式：完美跟随鼠标
-        trailX += (mouseX - trailX) * 0.06;
-        trailY += (mouseY - trailY) * 0.06;
-    }
-
-    updatePhysics(p1, trailX, trailY, true, isAnchored);
-    updatePhysics(p2, trailX, trailY, false, isAnchored);
-
-    drawTrail(p1, '255, 255, 255');
-    drawTrail(p2, '0, 255, 255');
-
-    ctx.beginPath();
-    ctx.arc(p1.x, p1.y, p1.radius, 0, Math.PI * 2);
-    ctx.fillStyle = '#ffffff';
-    ctx.shadowBlur = 15;
-    ctx.shadowColor = '#ffffff';
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.arc(p2.x, p2.y, p2.radius, 0, Math.PI * 2);
-    ctx.fillStyle = '#002233'; 
-    ctx.shadowBlur = 10;
-    ctx.shadowColor = '#00ffff'; 
-    ctx.fill();
-    
-    ctx.shadowBlur = 0; 
+    time += 0.016;
+    if (Math.random() < 0.012) spawnPulse();
+    drawGraph();
     rafId = requestAnimationFrame(animate);
 }
 
 function startAnimation() {
-    if (animationRunning) return;
+    if (animationRunning || !ctx) return;
     animationRunning = true;
     animate();
 }
 
 function stopAnimation() {
     animationRunning = false;
-    if (rafId !== null) {
-        cancelAnimationFrame(rafId);
-        rafId = null;
-    }
+    if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
 }
 
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-        stopAnimation();
+if (ctx) {
+    resizeCanvas();
+    buildGraph();
+    window.addEventListener('resize', () => { resizeCanvas(); buildGraph(); if (prefersReducedMotion) drawGraph(); });
+
+    if (prefersReducedMotion) {
+        drawGraph(); // 静态一帧，不进循环
     } else {
+        window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true });
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) stopAnimation(); else startAnimation();
+        });
         startAnimation();
     }
-});
-
-startAnimation();
-
-// ==========================================
-// 6. 动态渲染项目卡片系统
-// ==========================================
-function renderProjects() {
-    const container = document.getElementById('project-list-container');
-    if (!container) return; 
-    if (typeof portfolioData === 'undefined') return;
-
-    let htmlContent = '';
-    portfolioData.projects.forEach(project => {
-        const tagsHtml = project.tags.map(tag => `<span>${tag}</span>`).join('');
-        htmlContent += `
-            <a href="${project.link}" class="project-link">
-                <div class="glass-card">
-                    <h3>${project.title}</h3>
-                    <div class="tags">${tagsHtml}</div>
-                    <p>${project.desc}</p>
-                </div>
-            </a>
-        `;
-    });
-    container.innerHTML = htmlContent;
 }
-renderProjects();
 
 // ==========================================
-// 8. 全屏大图查看器系统 (Lightbox)
+// 2. 导航锚点高亮（仅主页生效）
+// ==========================================
+function initNavHighlight() {
+    const links = document.querySelectorAll('.nav-links a[href^="#"]');
+    if (links.length === 0 || !('IntersectionObserver' in window)) return;
+    const map = new Map();
+    links.forEach(link => {
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) map.set(target, link);
+    });
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                links.forEach(l => l.classList.remove('active'));
+                const link = map.get(entry.target);
+                if (link) link.classList.add('active');
+            }
+        });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    map.forEach((_, target) => observer.observe(target));
+}
+
+// ==========================================
+// 3. 全屏大图查看器 (Lightbox)
 // ==========================================
 function initLightbox() {
-    // 1. 动态在网页底层创建一个“暗房”容器，免去修改 HTML 的麻烦
+    // 页面上没有可放大的图就不创建暗房（避免主页出现孤立关闭按钮）
+    const images = document.querySelectorAll('.detail-hero-img, .detail-card-img, .showcase-img, .pixel-art');
+    if (images.length === 0) return;
+
     const overlay = document.createElement('div');
     overlay.className = 'lightbox-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', '图片查看器');
     const img = document.createElement('img');
     img.className = 'lightbox-img';
+    img.alt = '';
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'lightbox-close';
+    closeBtn.setAttribute('aria-label', '关闭大图 (Esc)');
+    closeBtn.textContent = '✕';
     overlay.appendChild(img);
+    overlay.appendChild(closeBtn);
     document.body.appendChild(overlay);
 
-    // 2. 自动搜捕页面上所有的展示图
-    const images = document.querySelectorAll('.sailors-hero-img, .showcase-img, .pixel-art');
-    
-    // 3. 为它们绑定点击放大事件
+    let lastTrigger = null; // 记录触发元素，关闭后归还焦点
+
+    function openLightbox(source) {
+        img.src = source.src;
+        img.alt = source.alt || '';
+        lastTrigger = source;
+        overlay.classList.add('active');
+        // .active 使 visibility 同步翻转为 visible，可立即移交焦点；个别渲染时序下补一次重试
+        closeBtn.focus();
+        if (document.activeElement !== closeBtn) setTimeout(() => closeBtn.focus(), 50);
+    }
+
+    function closeLightbox() {
+        overlay.classList.remove('active');
+        // 延迟清空图片地址，保证淡出动画丝滑
+        setTimeout(() => { if (!overlay.classList.contains('active')) img.src = ''; }, 300);
+        if (lastTrigger) lastTrigger.focus();
+    }
+
     images.forEach(image => {
-        image.addEventListener('click', () => {
-            img.src = image.src; // 把被点击的图片地址塞进暗房
-            overlay.classList.add('active'); // 开灯
+        image.setAttribute('tabindex', '0');
+        image.setAttribute('role', 'button');
+        image.addEventListener('click', () => openLightbox(image));
+        image.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(image); }
         });
     });
 
-    // 4. 点击暗房任意区域即可关闭
-    overlay.addEventListener('click', () => {
-        overlay.classList.remove('active');
-        // 延迟清空图片地址，保证淡出动画丝滑
-        setTimeout(() => { if(!overlay.classList.contains('active')) img.src = ''; }, 300);
+    overlay.addEventListener('click', closeLightbox);
+    closeBtn.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('active')) closeLightbox();
     });
 }
 
-// 确保网页完全加载后激活系统
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLightbox);
-} else {
+// ==========================================
+// 4. 联系方式一键复制（渐进增强：无 JS 时 mailto/链接原生可用）
+// ==========================================
+function initContactCopy() {
+    document.querySelectorAll('[data-copy]').forEach(el => {
+        el.addEventListener('click', () => {
+            const text = el.getAttribute('data-copy');
+            const write = navigator.clipboard
+                ? navigator.clipboard.writeText(text)
+                : Promise.reject();
+            write.then(() => {
+                // 优先只替换值文本，保留标签；页尾按钮无值节点则替换整体文本
+                const target = el.querySelector('.contact-value') || el;
+                if (!el.dataset.originalText) el.dataset.originalText = target.textContent;
+                target.textContent = '已复制 ✓';
+                el.classList.add('copied');
+                clearTimeout(el._copyTimer);
+                el._copyTimer = setTimeout(() => {
+                    target.textContent = el.dataset.originalText;
+                    el.classList.remove('copied');
+                }, 1600);
+            }).catch(() => { /* 剪贴板不可用时保持原生行为（mailto / 手动选中） */ });
+        });
+    });
+}
+
+// ==========================================
+// 启动
+// ==========================================
+function initAll() {
+    initNavHighlight();
     initLightbox();
+    initContactCopy();
+}
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+} else {
+    initAll();
 }

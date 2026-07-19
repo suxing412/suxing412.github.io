@@ -3,106 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>苏省 - 个人网页</title>
-    <meta name="description" content="苏省（XingSu）个人作品集，聚焦系统策划与关卡设计，包含 Monsterpedia、Graves of Sailors、Dualing Drivers 与 CK3 系统拆解项目。">
-    <meta property="og:title" content="苏省 - 个人网页">
-    <meta property="og:description" content="系统策划与关卡设计作品集，展示叙事系统、策略对战与玩法原型。">
+    <title>苏省 - 游戏系统策划 & 关卡设计作品集</title>
+    <meta name="description" content="苏省（XingSu）游戏策划作品集，聚焦系统策划与关卡设计，包含 CK3 系统拆解、Monsterpedia、Graves of Sailors、Dualing Drivers 与监制台等项目。">
+    <meta property="og:title" content="苏省 - 游戏系统策划 & 关卡设计作品集">
+    <meta property="og:description" content="系统策划与关卡设计作品集：系统拆解、策略玩法与生产管线管理。">
     <meta property="og:image" content="./images/XingSu.jpg">
     <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230e1a2b'/><g stroke='%23ffb454' stroke-width='4'><line x1='30' y1='66' x2='52' y2='34'/><line x1='52' y1='34' x2='72' y2='62'/><line x1='30' y1='66' x2='72' y2='62'/></g><circle cx='30' cy='66' r='8' fill='%230e1a2b' stroke='%23ffb454' stroke-width='4'/><circle cx='52' cy='34' r='8' fill='%23ffb454'/><circle cx='72' cy='62' r='8' fill='%230e1a2b' stroke='%23ffb454' stroke-width='4'/></svg>">
     <link rel="stylesheet" href="./CSS/style.css">
 </head>
 <body>
 
     <canvas id="bg-canvas"></canvas>
 
-    <div class="hero">
-        <div class="container" id="main-container">
-            <div class="column">
-                <span data-order="7">直</span><span data-order="8">到</span><span data-order="9">西</span><span data-order="10">湖</span><span data-order="11">畔</span>
+    <header class="top-nav">
+        <a class="brand" href="#top">苏省<span class="brand-role">SYSTEM &amp; LEVEL DESIGNER</span></a>
+        <nav class="nav-links">
+            <a href="#portfolio">作品</a>
+            <a href="#about">档案</a>
+            <a href="#principles">理念</a>
+            <a href="#contact">联系</a>
+            <a class="nav-resume" href="./Demos/苏省-简历.pdf" target="_blank" rel="noopener noreferrer">简历</a>
+        </nav>
+    </header>
+
+    <main id="top">
+
+        <!-- ============ 序章 ============ -->
+        <section class="hero">
+            <div class="hero-inner">
+                <p class="hero-kicker">苏省 · XING SU — 作品集</p>
+                <h1>我是苏省，<br>做<em>系统和关卡</em>的游戏策划。</h1>
+                <p class="hero-sub">
+                    RIT 游戏设计专业，2027 年毕业，在网易雷火做过关卡策划实习。平时玩得最多的是 P 社游戏，拆过《十字军之王 3》的整套系统。下面是我做过的东西。
+                </p>
+                <div class="hero-cta">
+                    <a class="btn-primary" href="#portfolio">看作品 ↓</a>
+                    <a class="btn-ghost" href="./Demos/苏省-简历.pdf" target="_blank" rel="noopener noreferrer">下载简历</a>
+                </div>
             </div>
-            <div class="column">
-                <span data-order="0">赠</span><span data-order="1">君</span><span data-order="2" class="shine">明</span><span data-order="3" class="shine">月</span><span data-order="4">满</span><span data-order="5">前</span><span data-order="6">溪</span>
+            <a class="hero-scroll" href="#portfolio">SCROLL ↓</a>
+        </section>
+
+        <!-- ============ 作品集 ============ -->
+        <section class="section" id="portfolio">
+            <div class="section-head">
+                <span class="sec-code">PORTFOLIO</span>
+                <h2>作品集</h2>
             </div>
-        </div>
-    </div>
 
-    <div class="drawer left" id="left-drawer">
-        <div class="drawer-content">
-    <h2 class="section-title">FILE // 档案</h2>
-    <div class="profile-card">
-        <div class="about-grid">
-            <img src="./images/XingSu.jpg" alt="苏省" class="profile-img" loading="lazy" decoding="async" width="1024" height="1024">
-            <div>
-                <h3 style="margin:0 0 5px 0; font-size:1.3rem; color:#fff; letter-spacing: 2px;">苏省</h3>
-                <p style="margin:0; color:#00ffff; font-size:0.8rem; text-transform: uppercase; letter-spacing: 1px;">System & Level Designer</p>
+            <div class="project-grid">
+                <a href="ck3-teardown.html" class="project-card bp-panel featured">
+                    <div class="featured-text">
+                        <p class="featured-label">重点项目</p>
+                        <h3>CK3 系统拆解</h3>
+                        <div class="tags"><span>System Teardown</span><span>Reverse Engineering</span><span>Core Loop</span></div>
+                        <p>把《十字军之王 3》的法理、经济、密谋和压力系统逐个拆开，用统一的图例画出整套系统怎么运转。这是我花时间最多的一份东西，也最能说明我做系统的思路。</p>
+                        <span class="card-arrow">看拆解 →</span>
+                    </div>
+                    <div class="featured-media">
+                        <img src="./images/optimized/1-5.jpg" alt="CK3 全系统核心运转图" loading="lazy" decoding="async" width="1920" height="1080">
+                    </div>
+                </a>
+
+                <a href="monsterpedia.html" class="project-card bp-panel">
+                    <h3>Monsterpedia</h3>
+                    <div class="tags"><span>Team Project</span><span>Social Combat</span></div>
+                    <p>四人团队的像素风侦探游戏，我做系统策划和主程。战斗不动手，靠收集的证据在对话里击破嫌疑人的心理防线。中途主导了一次架构重构，配一条新线索从 30 分钟降到 20 分钟。</p>
+                    <span class="card-arrow">看复盘 →</span>
+                </a>
+
+                <a href="sailors.html" class="project-card bp-panel">
+                    <h3>Graves of Sailors</h3>
+                    <div class="tags"><span>Tabletop Game</span><span>Balancing</span></div>
+                    <p>海战桌游，我做主策和数值。想在桌面上还原战争迷雾：棋子坐标公开、身份隐藏，靠观察对手的走法反推配置。数值用 Excel 建模，把两类单位的胜率压在 45%–55%。</p>
+                    <span class="card-arrow">看复盘 →</span>
+                </a>
+
+                <a href="tank-battle.html" class="project-card bp-panel">
+                    <h3>Dualing Drivers</h3>
+                    <div class="tags"><span>Prototype</span><span>Level Editor</span></div>
+                    <p>双人坦克对抗原型，五人团队。我写了两套手柄操控——街机映射和双摇杆拟真履带，还做了一个能存读 JSON 的关卡编辑器。</p>
+                    <span class="card-arrow">看复盘 →</span>
+                </a>
+
+                <a href="https://github.com/suxing412/AIworkflow-GameStudio" class="project-card bp-panel" target="_blank" rel="noopener noreferrer">
+                    <h3>监制台 AIworkflow-GameStudio ↗</h3>
+                    <div class="tags"><span>Production Management</span><span>AI Agent Pipeline</span></div>
+                    <p>自己写的 Electron 工具，用来管 AI agent 的生产流水线：文件夹就是工单状态，改名就是流转。制作人只管放行、拍板、终审三件事。</p>
+                    <span class="card-arrow">去 GitHub →</span>
+                </a>
             </div>
-        </div>
-        <p style="margin-top:20px; color:#d0e0f0; line-height:1.7; font-size:0.9rem;">
-            我是苏省，罗彻斯特理工学院（RIT）游戏设计专业学生，预计2027年毕业，目前主要方向是系统策划与关卡设计。
-        </p>
+        </section>
 
-        <p style="margin-top:20px; color:#d0e0f0; line-height:1.7; font-size:0.9rem;">
-            我主要使用 Unity 进行开发，熟悉 ScriptableObject 数据结构、基础系统设计以及关卡节奏设计。在项目中通常负责玩法系统设计、关卡流程规划和部分工具配置。
-        </p>
+        <!-- ============ 档案 ============ -->
+        <section class="section" id="about">
+            <div class="section-head">
+                <span class="sec-code">FILE</span>
+                <h2>档案</h2>
+            </div>
 
-        <p style="margin-top:20px; color:#d0e0f0; line-height:1.7; font-size:0.9rem;">
-            我比较喜欢策略和模拟类游戏，例如《十字军之王》《环世界》《Kenshi》等，这些游戏对系统结构和玩家决策空间的设计对我影响很大。目前也在尝试设计自己的策略与SLG玩法系统。
-        </p>
+            <div class="about-layout">
+                <div class="about-photo">
+                    <img src="./images/XingSu.jpg" alt="苏省个人照片" loading="lazy" decoding="async" width="1024" height="1024">
+                    <p class="photo-caption">FIG.01 — PORTRAIT</p>
+                    <h3 class="about-name">苏省</h3>
+                    <p class="about-role">System &amp; Level Designer</p>
+                </div>
+                <div class="about-body">
+                    <p>我是苏省，罗彻斯特理工学院（RIT）游戏设计专业学生，预计 2027 年毕业，目前主要方向是系统策划与关卡设计。</p>
+                    <p>我主要使用 Unity 进行开发，熟悉 ScriptableObject 数据结构、基础系统设计以及关卡节奏设计。在项目中通常负责玩法系统设计、关卡流程规划和部分工具配置。</p>
+                    <p>我比较喜欢策略和模拟类游戏，比如《十字军之王》《环世界》《Kenshi》，它们处理系统结构和玩家决策空间的方式对我影响很大。我也在试着设计自己的策略与 SLG 玩法系统。</p>
+                    <p>曾在网易雷火参与关卡策划实习，负责战斗关卡流程搭建和关卡事件逻辑设计。希望未来继续从事系统或关卡策划方向的工作。</p>
+                    <div class="skills-row">
+                        <p class="skills-label">TOOLKIT // 核心技能</p>
+                        <div class="tags">
+                            <span>Unity (C#)</span>
+                            <span>Unreal (Blueprint)</span>
+                            <span>ScriptableObject 数据架构</span>
+                            <span>关卡白盒与快速迭代</span>
+                            <span>Excel 数值模拟</span>
+                            <span>JSON 序列化 / Git 协同</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <p style="margin-top:20px; color:#d0e0f0; line-height:1.7; font-size:0.9rem;">
-            曾在网易雷火参与关卡策划实习，参与过战斗关卡流程搭建和关卡事件逻辑设计。希望未来能继续从事系统或关卡策划方向的工作。
-        </p>
+        <!-- ============ 设计理念 ============ -->
+        <section class="section" id="principles">
+            <div class="section-head">
+                <span class="sec-code">PRINCIPLES</span>
+                <h2>设计理念</h2>
+            </div>
 
-    </div>
+            <div class="principle">
+                <div class="principle-head">
+                    <p class="p-code">PACING &amp; FLOW</p>
+                    <h3>节奏与心流</h3>
+                </div>
+                <div class="principle-body">
+                    <p>我练过七年京剧和古琴，上过舞台，对人的情绪起伏和注意力变化比较敏感——知道什么时候该把节奏拉满，什么时候该放缓给人喘口气。做关卡我会把这套思路直接用上：潜入的高压、补给的缓冲、通关的释放，都提前想清楚。在网易雷火做潜入关卡时，就是靠调路线节奏、AI 巡逻频率和视野布局，解决了原关卡忽紧忽松、目标感弱的问题。</p>
+                </div>
+            </div>
 
-    <h2 class="section-title">PHILOSOPHY // 开发者画像</h2>
-    <div class="profile-card" style="color:#d0e0f0; line-height:1.8; font-size:0.9rem;">
-        <p><strong>■ 心流与节奏控制 (Pacing & Flow)：</strong> 
-            我有 7 年的京剧与古琴舞台经验，这段经历最实在的收获，是对人的情绪起伏、注意力变化特别敏感 —— 知道什么时候该把节奏拉满抓住注意力，什么时候该放缓给人喘息的空间。做关卡设计时，我会把这套思路直接落地，给玩家规划清晰的情绪曲线，什么时候给潜入的高压、什么时候给补给的缓冲、什么时候给通关的释放，都提前想清楚。之前在网易雷火做潜入关卡，我就是靠调整路线节奏、AI 巡逻频率和视野布局，解决了原版关卡忽紧忽松、玩家目标感弱的问题，让新手和硬核玩家都能找到适合自己的节奏。
-        </p>
-        
-        <p style="margin-top: 15px;"><strong>■ 高密度空间设计 (Spatial Design)：</strong> 
-            我做关卡设计的核心原则，是不浪费地图里的任何一块空间，让每一处场景都服务于玩法，而不是单纯做视觉装饰。不管是小的箱庭关卡，还是大的战场地图，我都会先明确玩家的核心目标，再通过路线规划、掩体和障碍物的摆放，给玩家留出足够的策略选择空间，不逼着玩家走一条固定的死路。我习惯从白模搭建开始，反复跑动线、测体验，一点点迭代优化，之前做的潜入关卡原型、战棋地图设计，都是靠这种笨办法磨出来的，确保玩家在同一个空间里，能玩出不同的策略和玩法。
-        </p>
+            <div class="principle">
+                <div class="principle-head">
+                    <p class="p-code">SPATIAL DESIGN</p>
+                    <h3>空间设计</h3>
+                </div>
+                <div class="principle-body">
+                    <p>我做关卡不留纯装饰的空间，每一块都要服务玩法。不管是小箱庭还是大战场，都先定玩家的核心目标，再用路线、掩体和障碍物给玩家留出选择余地，不逼人走死路。习惯从白模搭起，反复跑动线、测体验，一点点磨——潜入关卡原型、战棋地图，都是这么做出来的。</p>
+                </div>
+            </div>
 
-        <p style="margin-top: 15px;"><strong>■ 系统驱动与数据严谨 (System-Driven Design)：</strong> 
-            我是 P 社系列策略游戏的重度玩家，累计玩了几千小时，还完整拆解过《十字军之王 3》的底层系统架构，这让我做系统设计时，特别看重逻辑闭环和数据支撑，不喜欢拍脑袋、凭感觉做设计。不管是搭核心系统架构，还是调数值平衡，我都会先把底层的循环逻辑理清楚，用 Excel 做数值模拟，或者搭个简单的原型先验证效果，确保设计是稳定、可控的。之前做项目时，我主导的系统重构把内容配置效率提升了 30%，战棋项目的数值调整，把所有单位的对战胜率稳定在了 45%-55% 的区间，这些都不是靠想当然，是反复测试、一点点抠细节磨出来的。
-        </p>
-    </div>
+            <div class="principle">
+                <div class="principle-head">
+                    <p class="p-code">SYSTEM &amp; DATA</p>
+                    <h3>系统与数值</h3>
+                </div>
+                <div class="principle-body">
+                    <p>P 社游戏玩了几千小时，也完整拆过《十字军之王 3》的底层架构，所以我做系统很看重逻辑闭环和数据支撑：先理清循环，再用 Excel 模拟或者搭个原型验证。Monsterpedia 的配置流程重构、Sailors 的胜率区间，都是反复测试抠出来的，不靠拍脑袋。</p>
+                </div>
+            </div>
+        </section>
 
-    <h2 class="section-title">SKILLS // 核心技能</h2>
-    <div class="tags" style="gap: 8px; margin-bottom: 30px;">
-        <span>Unity (C#) / Unreal Engine (Blueprint)</span>
-        <span>基于 ScriptableObject 的数据架构设计</span>
-        <span>Level Grayboxing & Iteration (关卡白盒与快速迭代)</span>
-        <span>Excel 数值模拟</span>
-        <span>数据序列化 (JSON) / Git 协同开发</span>
-    </div>
-    
-    <div class="bottom-spacer"></div>
-</div>
-        <div class="drawer-tab">
-            <div class="tab-text">ABOUT ME</div>
-        </div>
-    </div>
+        <!-- ============ 联系 ============ -->
+        <section class="section" id="contact">
+            <div class="section-head">
+                <span class="sec-code">CONTACT</span>
+                <h2>联系</h2>
+            </div>
 
-    <div class="drawer right" id="right-drawer">
-        <div class="drawer-tab">
-            <div class="tab-text">PROJECTS</div>
-        </div>
-        <div class="drawer-content">
-    <h2 class="section-title">PORTFOLIO // 作品集</h2>
-    <p style="color: #aaddff; font-size: 0.9rem; line-height: 1.6; margin-bottom: 30px; opacity: 0.8;">
-        以下项目代表了我从<strong>“叙事系统构建”</strong>、<strong>“数值策略对战”</strong>到<strong>“玩法交互原型”</strong>的完整设计版图。点击卡片进入深度的开发复盘。
-    </p>
+            <div class="contact-card bp-panel">
+                <p class="contact-lead">想聊项目、聊系统设计，或者要一份简历，直接联系我：</p>
+                <div class="contact-links">
+                    <a href="mailto:xsu217822@gmail.com" class="contact-btn" data-copy="xsu217822@gmail.com"><span class="contact-label">✉ 邮箱</span><span class="contact-value">xsu217822@gmail.com</span></a>
+                    <button type="button" class="contact-btn" data-copy="18510121225"><span class="contact-label">微信</span><span class="contact-value">18510121225（点击复制）</span></button>
+                    <a href="https://github.com/suxing412" target="_blank" rel="noopener noreferrer" class="contact-btn"><span class="contact-label">GitHub</span><span class="contact-value">github.com/suxing412 ↗</span></a>
+                    <a href="./Demos/苏省-简历.pdf" target="_blank" rel="noopener noreferrer" class="contact-btn"><span class="contact-label">📄 简历</span><span class="contact-value">下载 PDF ↗</span></a>
+                </div>
+            </div>
+        </section>
 
-    <div id="project-list-container"></div>
-    
-    <div class="bottom-spacer"></div>
-</div>
-    </div>
+    </main>
 
-    <script src="./js/database.js" defer></script>
+    <footer class="site-footer">
+        <span>© 2026 苏省 · XING SU</span>
+        <span class="colophon">赠君明月满前溪，直到西湖畔</span>
+    </footer>
+
     <script src="./js/main.js" defer></script>
 </body>
 </html>

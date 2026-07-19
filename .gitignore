@@ -1,0 +1,6 @@
+# 简历含个人隐私信息(手机号/照片),不要发布到 GitHub Pages
+/resume/
+
+# AI 工具的本地工作目录,不发布
+/.claude/
+/.impeccable/
