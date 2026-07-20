@@ -45,13 +45,9 @@
         </div>
 
         <div class="content-block">
-            <h2 class="content-title">01. GAME FEEL // 拟真与街机：双轨驾驶模型</h2>
+            <h2 class="content-title">01. GAME FEEL // 两套驾驶手感</h2>
             <div class="content-body" style="margin-bottom: 30px;">
-                <p>为了同时满足休闲玩家与硬核玩家的需求，我设计并用 C# 实现了两套截然不同的手柄底层输入逻辑：</p>
-                <ul>
-                    <li><strong>街机模式 (Arcade)：</strong> 采用绝对方向映射，左摇杆直接控制坦克移动方向，极大地降低了新手的上手门槛。</li>
-                    <li><strong>拟真履带模式 (Simulation)：</strong> 深度模拟真实坦克驾驶体验。左摇杆控制左侧履带，右摇杆控制右侧履带。极具机械感的操作逻辑为核心玩家提供了巨大的操作上限与沉浸感。</li>
-                </ul>
+                <p>手柄操控我用 C# 写了两套。街机模式是绝对方向映射——左摇杆往哪推，坦克往哪走，拿起来就能玩。拟真模式是左摇杆管左履带、右摇杆管右履带，像真的在开坦克：难上手，但操作上限高，硬核玩家玩得很爽。两套并存，休闲和硬核玩家各取所需。</p>
             </div>
             <div class="content-block" style="border: none; background: none; padding: 0; margin: 0;">
                 <img src="./images/tank-controls.png" alt="游戏操控设置页面" class="detail-card-img" loading="lazy" decoding="async" width="1296" height="759">
@@ -59,13 +55,9 @@
         </div>
 
         <div class="content-block">
-            <h2 class="content-title">02. LEVEL EDITOR // JSON 读写与 UGC 开放</h2>
+            <h2 class="content-title">02. LEVEL EDITOR // 让玩家自己造图</h2>
             <div class="content-body" style="margin-bottom: 30px;">
-                <p>开放玩家 UGC（用户生成内容）是我们拓展游戏寿命的核心策略。我为此开发了内置的网格地图编辑器。</p>
-                <ul>
-                    <li><strong>自定义地图搭建：</strong> 支持放置陆地、水面（减速/不可通行）、可破坏墙壁（提供战术掩体）与不可破坏墙壁。</li>
-                    <li><strong>数据序列化：</strong> 实现了地图数据的本地存取功能。玩家绘制的地图可以被序列化保存为独立文件，并在主菜单中随时被重新读取和加载。</li>
-                </ul>
+                <p>想让一个对抗原型活得久，就得让玩家自己造图。我做了个内置的网格地图编辑器：能摆陆地、水面（减速或不可通行）、可破坏的墙和不可破坏的墙；画好的地图序列化成 JSON 存到本地，主菜单里随时读回来开一局。</p>
             </div>
             <div class="content-block" style="border: none; background: none; padding: 0; margin: 0;">
                 <img src="./images/tank-editor.png" alt="关卡编辑器界面" class="detail-card-img" loading="lazy" decoding="async" width="1296" height="759">
@@ -73,13 +65,9 @@
         </div>
 
         <div class="content-block">
-            <h2 class="content-title">03. PROGRESSION // 关卡体系与内容广度</h2>
+            <h2 class="content-title">03. PROGRESSION // 官方关卡与选关</h2>
             <div class="content-body" style="margin-bottom: 30px;">
-                <p>除了功能强大的编辑器，游戏本身也内置了数个设计精良的官方关卡。选关界面不仅管理着官方关卡，也充当着读取玩家自定义地图文件的集线器（Hub）。</p>
-                <ul>
-                    <li><strong>官方关卡：</strong> 每个关卡都有独特的地形博弈与道具（加速、修复、弹夹增幅）生成点布局。</li>
-                    <li><strong>无限重玩：</strong> 编辑器与选关系统的打通，让 Dualing Drivers 拥有了无限的游戏可能性。</li>
-                </ul>
+                <p>游戏自带几个官方关卡，每张图的地形和道具生成点（加速、修复、弹夹增幅）都单独调过。选关界面同时也是读取玩家自定义地图的入口——编辑器和选关打通之后，这个原型的图就永远打不完了。</p>
             </div>
             <div class="content-block" style="border: none; background: none; padding: 0; margin: 0;">
                 <img src="./images/tank-level-select.png" alt="游戏关卡选关界面" class="detail-card-img" loading="lazy" decoding="async" width="1296" height="759">

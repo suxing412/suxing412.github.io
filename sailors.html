@@ -45,33 +45,25 @@
         </div>
 
         <div class="content-block">
-            <h2 class="content-title">01. THE VISION // 电子游戏级的“桌面迷雾”</h2>
+            <h2 class="content-title">01. THE VISION // 桌面上的战争迷雾</h2>
             <div class="content-body">
-                <p>本作的初始架构是按照一款带有“大战略 (Grand Strategy)”色彩的电子游戏进行设计的。我的核心目的是在桌面上还原海战中极其残酷的<strong>“信息战与战争迷雾 (Fog of War)”</strong>。</p>
-                <ul>
-                    <li><strong>公开坐标，隐藏身份：</strong> 棋盘上所有战舰的坐标对双方公开，但舰船的真实类型与属性是完全隐藏的。</li>
-                    <li><strong>行为侧写系统：</strong> 玩家必须像真正的指挥官一样，通过观察敌方棋子的移动步数、火力类型（普通炮击或航空打击）等线索，反向推理出敌方的舰种配置。</li>
-                    <li><strong>旗舰斩首机制：</strong> 每方暗中指定一艘旗舰，一旦旗舰被击沉，全舰队将瘫痪一回合。隐藏己方旗舰并猎杀敌方旗舰是博弈的核心。</li>
-                </ul>
+                <p>一开始我是按一款带大战略味道的电子游戏来设计它的，核心想法是把海战的信息战搬到桌面上：所有棋子的坐标公开，但舰种和属性完全隐藏。你得像真的指挥官一样，从对手棋子走了几格、用炮击还是空袭这些线索，反推他的舰队配置。</p>
+                <p>每方还要暗中指定一艘旗舰——旗舰沉了，全舰队瘫一回合。藏好自己的旗舰、找出对面的，就是这个游戏博弈的核心。</p>
             </div>
         </div>
 
         <div class="content-block">
-            <h2 class="content-title">02. COMPROMISE // 50分钟课时的“系统降维”</h2>
+            <h2 class="content-title">02. COMPROMISE // 50 分钟课时里的做减法</h2>
             <div class="content-body">
-                <p>在早期的盲测中，玩家给出了极其尖锐的反馈：<span class="highlight">"这太像一个电子游戏了，有太多需要追踪的数据"</span>。再加上课程要求游戏必须在一个 50 分钟的课时内完成一局完整体验，我作为主策必须对系统进行大刀阔斧的“做减法”。</p>
-                <ul>
-                    <li><strong>胜利条件的妥协：</strong> 游戏最初的胜利条件是硬核的“全歼敌方舰队”。为了适配 50 分钟的极限时长，我将其修改为类似“First Blood”的短局模式（只要击沉一艘关键船只即可宣告胜利）。</li>
-                    <li><strong>抹除繁琐的运算：</strong> 删除了大量需要人工运算的次级战舰类型，将核心聚焦于“战列舰 (Battleship)”与“航空母舰 (Carrier)”这两种具有极高差异性的单位上。</li>
-                </ul>
-                <p style="margin-top: 20px; font-style: italic; opacity: 0.8;">“这次开发让我深刻意识到，设计出精妙的系统只是第一步；如何根据物理载体和游玩场景的限制，克制地剪裁系统，才是策划的必修课。”</p>
+                <p>早期盲测的反馈很直接：<span class="highlight">"这太像一个电子游戏了，要追踪的数据太多。"</span>加上课程要求一节 50 分钟的课里必须打完一整局，我只能对自己的系统下狠手：胜利条件从"全歼敌方舰队"改成击沉一艘关键船就赢；砍掉一堆需要人工运算的次级舰种，只留下战列舰和航母这两种差异最大的单位。</p>
+                <p>这个项目教会我的不是怎么堆系统，而是怎么剪系统——设计得再精妙，装不进 50 分钟的课时就是零。</p>
             </div>
         </div>
 
         <div class="content-block">
-            <h2 class="content-title">03. BALANCING // 基于 Excel 的动态胜率控制</h2>
+            <h2 class="content-title">03. BALANCING // 用 Excel 压胜率</h2>
             <div class="content-body">
-                <p>由于游戏采用了掷骰子 (XdY) 的随机伤害判定，如何保证竞技的公平性成为了最大的挑战。我通过 Excel 建立了一套完整的伤害期望与血量模型，并将战列舰与航母在标准对战中的胜率严格平衡在 <span class="highlight">45% - 55%</span> 的区间内。</p>
+                <p>伤害靠掷骰子（XdY）判定，随机性一大，公平就成了最大的问题。我在 Excel 里搭了伤害期望和血量模型，反复调参，把战列舰和航母在标准对战里的胜率压在 <span class="highlight">45%–55%</span> 之间。</p>
             </div>
             
             <div class="media-grid">

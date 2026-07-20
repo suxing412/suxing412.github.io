@@ -235,10 +235,19 @@ function initLightbox() {
 
     function closeLightbox() {
         overlay.classList.remove('active');
+        img.classList.remove('zoomed');
+        overlay.scrollTo(0, 0);
         // 延迟清空图片地址，保证淡出动画丝滑
         setTimeout(() => { if (!overlay.classList.contains('active')) img.src = ''; }, 300);
         if (lastTrigger) lastTrigger.focus();
     }
+
+    // 点击图片：在"适应屏幕 ↔ 原始尺寸"之间切换（大图看细节的关键路径）
+    img.addEventListener('click', (e) => {
+        e.stopPropagation(); // 点图不关闭，点背景才关闭
+        img.classList.toggle('zoomed');
+        if (!img.classList.contains('zoomed')) overlay.scrollTo(0, 0);
+    });
 
     images.forEach(image => {
         image.setAttribute('tabindex', '0');
