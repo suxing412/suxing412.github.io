@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>监制台 AIworkflow-GameStudio - 苏省 XingSu</title>
+    <meta name="description" content="监制台项目复盘：把软件生产流程交给 AI agent 流水线的驾驶舱——目录即状态机、职能分工领单、QA 复核回环、额度与超时风险闸值。">
+    <meta property="og:title" content="监制台 AIworkflow-GameStudio - 苏省 XingSu">
+    <meta property="og:description" content="AI agent 生产流水线的驾驶舱：人只做投池、拍板、终审三件事。">
+    <meta property="og:image" content="./images/optimized/studio-board.jpg">
+    <meta property="og:type" content="article">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><rect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%230e1a2b%27/><g stroke=%27%23ffb454%27 stroke-width=%274%27><line x1=%2730%27 y1=%2766%27 x2=%2752%27 y2=%2734%27/><line x1=%2752%27 y1=%2734%27 x2=%2772%27 y2=%2762%27/><line x1=%2730%27 y1=%2766%27 x2=%2772%27 y2=%2762%27/></g><circle cx=%2730%27 cy=%2766%27 r=%278%27 fill=%27%230e1a2b%27 stroke=%27%23ffb454%27 stroke-width=%274%27/><circle cx=%2752%27 cy=%2734%27 r=%278%27 fill=%27%23ffb454%27/><circle cx=%2772%27 cy=%2762%27 r=%278%27 fill=%27%230e1a2b%27 stroke=%27%23ffb454%27 stroke-width=%274%27/></svg>">
+    <link rel="stylesheet" href="./CSS/style.css">
+    <link rel="stylesheet" href="./CSS/detail.css">
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <header class="top-nav">
+        <a class="brand" href="./index.html">苏省<span class="brand-role">SYSTEM DESIGN &amp; PRODUCTION</span></a>
+        <nav class="nav-links">
+            <a href="./index.html#portfolio">← 返回作品集</a>
+            <a class="nav-resume" href="./Demos/苏省-简历.pdf" target="_blank" rel="noopener noreferrer">简历</a>
+        </nav>
+    </header>
+
+    <div class="detail-container">
+
+        <div class="project-header">
+            <h1 class="massive-title">PRODUCER CONSOLE</h1>
+            <h2 class="project-subtitle">监制台 · AI agent 生产流水线的驾驶舱</h2>
+            <div class="project-meta">
+                <span>2026 - 进行中</span>
+                <span>个人项目</span>
+                <span>设计 & 开发</span>
+            </div>
+            <div class="tags" style="justify-content: flex-start;">
+                <span>AI Agent Pipeline</span><span>Production</span><span>State Machine</span><span>Electron</span>
+            </div>
+            <div class="footer-links" style="margin-top: 22px;">
+                <a href="https://github.com/suxing412/AIworkflow-GameStudio" target="_blank" rel="noopener noreferrer" class="footer-btn">GitHub 源码 ↗</a>
+            </div>
+        </div>
+
+        <div class="hero-media">
+            <img src="./images/optimized/studio-board.jpg" alt="监制台工单池：草稿→待投→池→在途→质检→待验收的流水线看板（演示数据）" loading="lazy" decoding="async" width="1680" height="950">
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">01. WHY // 把生产流程交给流水线</h2>
+            <div class="content-body">
+                <p>和 AI 结对开发久了会发现：真正稀缺的不是执行力，是人的判断力。如果每张任务都要人来分配、跟催、验收，AI 再快也快不过瓶颈在人。</p>
+                <p>监制台把这件事倒过来：软件生产被编排成 agent 流水线，人只做三件事——<span class="highlight">投池放行、争议拍板、品味终审</span>。起草辅助、领单、执行、质检、委托验收、失败兜底、记账、通知，全部自动。它是 ticket-hub（派发制）的后继者：从"人推任务给 AI"进化为"AI 从池里拉任务"。</p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">02. SYSTEM // 目录即状态机，职能即编制</h2>
+            <div class="content-body">
+                <p>草稿、待投、池、在途、质检、待验收、待定夺、执行失败、完成、已归档——<span class="highlight">文件夹就是工单状态，改名就是流转</span>，git 天然是它的历史与回滚。执行器每 15 秒扫池，空闲 agent 按职能（策划 / 程序 / 美术 / QA / 装配）自动领单执行；QA agent 只读复核，不过则进自修回环，超过上限自动上交人裁；失败单进独立分诊通道，绝不悬空。</p>
+                <p>总览页只回答一个问题：<span class="highlight">"现在需要我决定什么？"</span>——待验收、待定夺、投放建议，其余信息全部退到动态日志里。</p>
+            </div>
+            <img src="./images/optimized/studio-home.jpg" alt="监制台总览：需你处理清单、动态日志与额度双池（演示数据，试跑模式零额度）" class="showcase-img" loading="lazy" decoding="async" width="1680" height="790">
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">03. SAFETY // 给自动化划边界</h2>
+            <div class="content-body">
+                <p>让 agent 拥有对仓库的写权限，等于把风险设计当成第一优先级：<span class="highlight">试跑模式默认零 AI 调用</span>，可以安全体验全流程；实弹模式默认锁定，解锁是显式操作加二次确认；额度双池带 5 小时与周双重阈值锁——烧穿周额度是灾难级事故，宁可流水线停摆；执行超时整树击杀，进失败态由人分诊。</p>
+                <p>做这套东西给我的最大启发：自动化系统的价值不取决于它能做多少，而取决于它的边界画得多清楚。</p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">04. SHIP // 交付与演进</h2>
+            <div class="content-body">
+                <p>部署脚本一键安装，启动时跑四组全链路环境自检，降级或阻断都逐项写明修复动作；工单流转记录自动 git 记账。它和 <a href="./ticket-hub.html" style="color: inherit;">ticket-hub 工单中台</a>、<a href="./scheduler.html" style="color: inherit;">排期工具</a>组成我自己的一套研发管理工具链——同一个理念的三次落地：<span class="highlight">项目管理的本质不是盯人，是把状态变化设计成不需要盯的结构</span>。</p>
+            </div>
+        </div>
+
+        <div class="project-footer">
+            <h3 class="footer-title">资源与联系</h3>
+            <div class="footer-links">
+                <a href="https://github.com/suxing412/AIworkflow-GameStudio" target="_blank" rel="noopener noreferrer" class="footer-btn">GitHub 源码 ↗</a>
+                <a href="mailto:xsu217822@gmail.com" class="footer-btn" data-copy="xsu217822@gmail.com">✉ 邮箱联系</a>
+                <a href="./Demos/苏省-简历.pdf" target="_blank" rel="noopener noreferrer" class="footer-btn">简历 PDF ↗</a>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="site-footer">
+        <span>© 2026 苏省 · XING SU</span>
+        <span class="colophon">赠君明月满前溪，直到西湖畔</span>
+    </footer>
+
+    <script src="./js/main.js" defer></script>
+</body>
+</html>
