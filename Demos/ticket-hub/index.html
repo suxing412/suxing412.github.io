@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ticket-hub · 工单中台（在线演示）</title>
+<script>
+/* 演示模式：拦截 fetch，把 API 请求映射到静态 mock JSON。数据为虚构示例，刷新即复位。 */
+(function () {
+  const realFetch = window.fetch.bind(window);
+  const MOCKS = [
+    [/^\/api\/index/,        'mock/index.json'],
+    [/^\/api\/env$/,         'mock/env.json'],
+    [/^\/api\/pulse/,        'mock/pulse.json'],
+    [/^\/api\/quota/,        'mock/quota.json'],
+    [/^\/api\/git-status/,   'mock/git-status.json'],
+    [/^\/api\/journal/,      'mock/journal.json'],
+    [/^\/api\/docs/,         'mock/docs.json'],
+    [/^\/api\/activity\?project=DEMO/, 'mock/activity-DEMO.json'],
+    [/^\/api\/queue\?project=DEMO/,    'mock/queue-DEMO.json']
+  ];
+  window.fetch = function (url, opts) {
+    const u = typeof url === 'string' ? url : url.url;
+    if (u.startsWith('/api/')) {
+      const t = u.match(/^\/api\/ticket\?id=([A-Za-z0-9-]+)/);
+      if (t) return realFetch('mock/tickets/' + t[1] + '.json');
+      for (const [re, file] of MOCKS) {
+        if (re.test(u)) return realFetch(file);
+      }
+      if (opts && opts.method && opts.method !== 'GET') {
+        const body = (u === '/api/save')
+          ? { ok: true, demo: true }
+          : { ok: false, error: '在线演示模式：此操作需要本地服务端（派发 / 回流 / git 同步仅在桌面版可用）' };
+        return Promise.resolve(new Response(JSON.stringify(body), { headers: { 'Content-Type': 'application/json' } }));
+      }
+      return Promise.resolve(new Response(JSON.stringify({ ok: false, demo: true }), { headers: { 'Content-Type': 'application/json' } }));
+    }
+    return realFetch(url, opts);
+  };
+  window.addEventListener('DOMContentLoaded', function () {
+    const bar = document.createElement('div');
+    bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#1A1D21;color:#fff;font-size:13px;padding:8px 16px;text-align:center;opacity:.92';
+    bar.innerHTML = '在线演示 · 数据为虚构示例项目《像素牧场》· 改动仅存于当前页面，刷新即复位 · <a href="../../ticket-hub.html" style="color:#8AB4F8">← 返回项目介绍</a>';
+    document.body.appendChild(bar);
+  });
+})();
+</script>
+<link rel="icon" href="favicon.ico" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#/">
+    <svg class="brand-icon" width="56" height="56" viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="0" y="0" width="100" height="100" rx="22" fill="#1A1D21"/>
+      <rect x="27" y="20" width="51" height="37" rx="5" fill="#FFFFFF" fill-opacity="0.25"/>
+      <rect x="22" y="28" width="51" height="37" rx="5" fill="#FFFFFF" fill-opacity="0.55"/>
+      <rect x="17" y="37" width="51" height="37" rx="5" fill="#FFFFFF"/>
+      <rect x="23" y="45" width="27" height="4" rx="2" fill="#8A929E"/>
+      <rect x="23" y="53" width="38" height="4" rx="2" fill="#E4E2DC"/>
+      <path d="M 51 62 l 5 6 l 11 -13" fill="none" stroke="#1A1D21" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+  <div class="titleblock">
+    <h1 id="page-title">工单中台</h1>
+    <p id="crumb" class="crumb">ticket-hub · AI开单工作流</p>
+  </div>
+  <div class="gsearch">
+    <input id="gsearch-input" type="search" placeholder="🔍 搜索工单 ID / 标题 / 标签…" autocomplete="off" />
+    <div id="gsearch-results" class="gsearch-results" hidden></div>
+  </div>
+  <a href="#/docs"><button class="iconbtn" title="系统说明书">📖</button></a>
+  <a href="#/settings"><button class="iconbtn" title="设置">⚙</button></a>
+</header>
+
+<div id="savebar" class="savebar" hidden>
+  <span class="savebar-dot">●</span>
+  <span id="savebar-text"></span>
+  <span class="savebar-spacer"></span>
+  <button id="btn-save" class="primary">保存</button>
+  <button id="btn-discard">放弃</button>
+</div>
+
+<main id="view"></main>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>排期工具 - 苏省 XingSu</title>
+    <meta name="description" content="排期工具项目复盘：本地优先的甘特图排期工具，拖拽排期、职能配色、关键路径与冲突检测，已进入一线 PM 试用。">
+    <meta property="og:title" content="排期工具 - 苏省 XingSu">
+    <meta property="og:description" content="给真实管线写的甘特图排期工具：直接操纵、色彩即信息、导出即门面。">
+    <meta property="og:image" content="./images/optimized/scheduler-main.jpg">
+    <meta property="og:type" content="article">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><rect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%230e1a2b%27/><g stroke=%27%23ffb454%27 stroke-width=%274%27><line x1=%2730%27 y1=%2766%27 x2=%2752%27 y2=%2734%27/><line x1=%2752%27 y1=%2734%27 x2=%2772%27 y2=%2762%27/><line x1=%2730%27 y1=%2766%27 x2=%2772%27 y2=%2762%27/></g><circle cx=%2730%27 cy=%2766%27 r=%278%27 fill=%27%230e1a2b%27 stroke=%27%23ffb454%27 stroke-width=%274%27/><circle cx=%2752%27 cy=%2734%27 r=%278%27 fill=%27%23ffb454%27/><circle cx=%2772%27 cy=%2762%27 r=%278%27 fill=%27%230e1a2b%27 stroke=%27%23ffb454%27 stroke-width=%274%27/></svg>">
+    <link rel="stylesheet" href="./CSS/style.css">
+    <link rel="stylesheet" href="./CSS/detail.css">
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <header class="top-nav">
+        <a class="brand" href="./index.html">苏省<span class="brand-role">SYSTEM DESIGN &amp; PRODUCTION</span></a>
+        <nav class="nav-links">
+            <a href="./index.html#portfolio">← 返回作品集</a>
+            <a class="nav-resume" href="./Demos/苏省-简历.pdf" target="_blank" rel="noopener noreferrer">简历</a>
+        </nav>
+    </header>
+
+    <div class="detail-container">
+
+        <div class="project-header">
+            <h1 class="massive-title">SCHEDULER</h1>
+            <h2 class="project-subtitle">排期工具 · 本地优先的甘特图</h2>
+            <div class="project-meta">
+                <span>2026 - 进行中</span>
+                <span>个人项目</span>
+                <span>设计 & 开发</span>
+            </div>
+            <div class="tags" style="justify-content: flex-start;">
+                <span>Gantt</span><span>Critical Path</span><span>PM Tooling</span><span>Electron</span>
+            </div>
+            <div class="footer-links" style="margin-top: 22px;">
+                <a href="./Demos/scheduler/index.html" class="footer-btn">▶ 在线体验（示例数据，可拖拽）</a>
+                <a href="https://github.com/suxing412/schedule-gantt" target="_blank" rel="noopener noreferrer" class="footer-btn">GitHub 源码 ↗</a>
+            </div>
+        </div>
+
+        <div class="hero-media">
+            <img src="./images/optimized/scheduler-main.jpg" alt="排期工具主界面：左侧任务树 + 右侧甘特时间轴（演示数据）" loading="lazy" decoding="async" width="1680" height="870">
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">01. WHY // 为什么自己写一个</h2>
+            <div class="content-body">
+                <p>在《归唐》做项目管理实习时，我手上有三条特性管线、几十项任务。表格里任务一平铺，父子关系、依赖和关键节点全都看不见，同步一次排期要配一堆解释。市面上的重型项目管理软件按钮成堆，打开它的成本比排期本身还高。</p>
+                <p>所以我给自己写了这个工具：打开即用、排期动作零摩擦、导出的图不需要解释就能被同事看懂。它现在是我每天维护管线的主力工具，也<span class="highlight">进入了主管 PM 的试用</span>。</p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">02. CORE // 排期即直接操纵</h2>
+            <div class="content-body">
+                <p>核心原则是"能在图上拖的就不进弹窗"：拖任务条平移日期、拖两端改起止、多选整组平移、键盘挪期；父任务起止和进度由子任务<span class="highlight">自动汇总</span>，不许手改。任务按职能（策划 / 美术 / 程序 / 技术策划 / 技术美术 / 动画）着色，按管线组织顶层结构，按阶段标记进程——<span class="highlight">色彩只服务于信息</span>：职能归属和状态警示，不为好看上色。</p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">03. ANALYSIS // 关键路径与冲突检测</h2>
+            <div class="content-body">
+                <p>按住 Ctrl 从前置任务拖一条线就建立依赖，添加依赖时会智能推荐"结束时间最接近本任务开始"的候选，并自动排除循环依赖。图上自动计算<span class="highlight">关键路径</span>（红色描边——这些任务一延期整个项目就延期），开始日期早于前置完成的任务会亮出<span class="highlight">冲突警告 ⚠</span>。还有一个"流程模式"：把一组子任务收进同一行线性展示，专门表现"步骤 A → 步骤 B → 验收"这类流程。</p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">04. SHIP // 导出物即门面</h2>
+            <div class="content-body">
+                <p>数据本地 JSON 自动保存、自动备份，一键导出 PNG 用于同步——同事看到的唯一界面就是这张导出图，所以它的清晰度等同于工具本身的质量。整个工具的设计原则写在 PRODUCT.md 里：<span class="highlight">工具隐形、色彩即信息、直接操纵优先、默认即正确</span>。每个界面元素都要能回答"删掉它会损失什么"，答不上来的就删掉。</p>
+                <p>这个项目对我最大的意义：把项目管理里"确定性"的方法论——任务拆解、依赖管理、关键路径——做成了自己每天都在用的系统，而不是停留在文档里。</p>
+            </div>
+        </div>
+
+        <div class="project-footer">
+            <h3 class="footer-title">资源与联系</h3>
+            <div class="footer-links">
+                <a href="./Demos/scheduler/index.html" class="footer-btn">▶ 在线体验演示版</a>
+                <a href="https://github.com/suxing412/schedule-gantt" target="_blank" rel="noopener noreferrer" class="footer-btn">GitHub 源码 ↗</a>
+                <a href="mailto:xsu217822@gmail.com" class="footer-btn" data-copy="xsu217822@gmail.com">✉ 邮箱联系</a>
+                <a href="./Demos/苏省-简历.pdf" target="_blank" rel="noopener noreferrer" class="footer-btn">简历 PDF ↗</a>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="site-footer">
+        <span>© 2026 苏省 · XING SU</span>
+        <span class="colophon">赠君明月满前溪，直到西湖畔</span>
+    </footer>
+
+    <script src="./js/main.js" defer></script>
+</body>
+</html>

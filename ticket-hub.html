@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ticket-hub 工单中台 - 苏省 XingSu</title>
+    <meta name="description" content="ticket-hub 项目复盘：人与 AI 协作的工单管理中台，md 工单唯一事实源，树形/看板/甘特三视图与派发-回流状态机。">
+    <meta property="og:title" content="ticket-hub 工单中台 - 苏省 XingSu">
+    <meta property="og:description" content="人与 AI 协作的工单管理中台：目录即状态机，派发与回流全自动。">
+    <meta property="og:image" content="./images/optimized/hub-overview.jpg">
+    <meta property="og:type" content="article">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><rect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%230e1a2b%27/><g stroke=%27%23ffb454%27 stroke-width=%274%27><line x1=%2730%27 y1=%2766%27 x2=%2752%27 y2=%2734%27/><line x1=%2752%27 y1=%2734%27 x2=%2772%27 y2=%2762%27/><line x1=%2730%27 y1=%2766%27 x2=%2772%27 y2=%2762%27/></g><circle cx=%2730%27 cy=%2766%27 r=%278%27 fill=%27%230e1a2b%27 stroke=%27%23ffb454%27 stroke-width=%274%27/><circle cx=%2752%27 cy=%2734%27 r=%278%27 fill=%27%23ffb454%27/><circle cx=%2772%27 cy=%2762%27 r=%278%27 fill=%27%230e1a2b%27 stroke=%27%23ffb454%27 stroke-width=%274%27/></svg>">
+    <link rel="stylesheet" href="./CSS/style.css">
+    <link rel="stylesheet" href="./CSS/detail.css">
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <header class="top-nav">
+        <a class="brand" href="./index.html">苏省<span class="brand-role">SYSTEM DESIGN &amp; PRODUCTION</span></a>
+        <nav class="nav-links">
+            <a href="./index.html#portfolio">← 返回作品集</a>
+            <a class="nav-resume" href="./Demos/苏省-简历.pdf" target="_blank" rel="noopener noreferrer">简历</a>
+        </nav>
+    </header>
+
+    <div class="detail-container">
+
+        <div class="project-header">
+            <h1 class="massive-title">TICKET-HUB</h1>
+            <h2 class="project-subtitle">工单中台 · 人与 AI 协作的执行系统</h2>
+            <div class="project-meta">
+                <span>2026 - 进行中</span>
+                <span>个人项目</span>
+                <span>设计 & 开发</span>
+            </div>
+            <div class="tags" style="justify-content: flex-start;">
+                <span>Ticket System</span><span>Kanban / Gantt</span><span>AI Workflow</span><span>Node / Electron</span>
+            </div>
+            <div class="footer-links" style="margin-top: 22px;">
+                <a href="./Demos/ticket-hub/index.html" class="footer-btn">▶ 在线体验（示例数据，可交互）</a>
+                <a href="https://github.com/suxing412/AIworkflow-TicketHub" target="_blank" rel="noopener noreferrer" class="footer-btn">GitHub 源码 ↗</a>
+            </div>
+        </div>
+
+        <div class="hero-media">
+            <img src="./images/optimized/hub-overview.jpg" alt="ticket-hub 项目总览（虚构示例项目《像素牧场》）" loading="lazy" decoding="async" width="1680" height="700">
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">01. WHY // 给"人机协作"立规矩</h2>
+            <div class="content-body">
+                <p>我平时和 AI 结对开发个人项目：我出需求和验收，Claude 负责规划评审，Codex 负责实现。项目一多问题就来了——任务口头化、进度黑箱、做完的和没做的混在一起。这和团队协作里"信息不对齐"是同一个病。</p>
+                <p>ticket-hub 是我给这套协作立的规矩：<span class="highlight">tickets/ 目录下的 Markdown 工单是唯一事实源</span>，人、Claude、Codex 三方都围绕工单工作。改文件和在界面上操作完全等效，git 就是它的历史记录。</p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">02. SYSTEM // 状态机与派发-回流</h2>
+            <div class="content-body">
+                <p>每张工单沿着状态机流转：<span class="highlight">草稿 → 就绪 → 进行中 → 待评审 → 待验收 → 完成</span>。工单支持最多 4 层父子分解，父单进度由子单自动上卷；界面上的一切改动先暂存、点保存才落盘，每次保存在 journal/ 记一条流水，可整体放弃回滚。</p>
+                <p>最关键的一环是<span class="highlight">派发与回流</span>：叶子工单满足"就绪且依赖全完成"才允许派发，派发时工单带快照写进目标项目的信箱文件，AI 监听器自动开工；完工报告出现后自动归档、工单自动置为"待评审"。任务从分配到验收，全程不需要口头同步。</p>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">03. VIEWS // 同一份数据，三种视图</h2>
+            <div class="content-body">
+                <p>树形看结构与进度，看板按状态拖卡片，甘特图拖条挪期、拖两端改起止、依赖箭头、逾期标红。视图只是投影，数据永远是那批 md 文件。页面截图与<a href="./Demos/ticket-hub/index.html" style="color: inherit;">在线演示</a>使用虚构示例项目《像素牧场》的数据。</p>
+            </div>
+            <img src="./images/optimized/hub-tree.jpg" alt="树形视图：父子分解、进度上卷与逾期标红（示例数据）" class="showcase-img" loading="lazy" decoding="async" width="1680" height="810">
+            <img src="./images/optimized/hub-board.jpg" alt="看板视图：按状态分列，父单状态由子单推导（示例数据）" class="showcase-img" loading="lazy" decoding="async" width="1680" height="770" style="margin-top: 16px;">
+        </div>
+
+        <div class="content-block">
+            <h2 class="content-title">04. SHIP // 工程化交付</h2>
+            <div class="content-body">
+                <p>带 <span class="highlight">24 项单元测试</span>，可跑浏览器版、Electron 桌面版，也能打包成免安装 exe——exe 只是壳不含数据，放进任何仓库双击即用。<a href="https://github.com/suxing412/AIworkflow-TicketHub" target="_blank" rel="noopener noreferrer" style="color: inherit;">源码已开源</a>；它的协作理念由后继项目「监制台」（AI agent 生产流水线）继续演进，两者组成我自己的一套研发工具链。</p>
+                <p>这个项目让我把"目录即状态机、文档即事实源"这些想法真正跑通了：项目管理的本质不是盯人，是把状态变化设计成不需要盯的结构。</p>
+            </div>
+        </div>
+
+        <div class="project-footer">
+            <h3 class="footer-title">资源与联系</h3>
+            <div class="footer-links">
+                <a href="./Demos/ticket-hub/index.html" class="footer-btn">▶ 在线体验演示版</a>
+                <a href="https://github.com/suxing412/AIworkflow-TicketHub" target="_blank" rel="noopener noreferrer" class="footer-btn">GitHub 源码 ↗</a>
+                <a href="mailto:xsu217822@gmail.com" class="footer-btn" data-copy="xsu217822@gmail.com">✉ 邮箱联系</a>
+                <a href="./Demos/苏省-简历.pdf" target="_blank" rel="noopener noreferrer" class="footer-btn">简历 PDF ↗</a>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="site-footer">
+        <span>© 2026 苏省 · XING SU</span>
+        <span class="colophon">赠君明月满前溪，直到西湖畔</span>
+    </footer>
+
+    <script src="./js/main.js" defer></script>
+</body>
+</html>
