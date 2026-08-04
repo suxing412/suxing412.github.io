@@ -12,7 +12,7 @@
   - `monsterpedia.html` — 像素风侦探游戏，系统策划 & 主程
   - `sailors.html` — 海战桌游，主策 & 数值
   - `tank-battle.html` — 双人坦克对抗原型，操控与关卡编辑器
-- **监制台**（[AIworkflow-GameStudio](https://github.com/suxing412/AIworkflow-GameStudio)）：AI 工作流管理工具，单独一个仓库
+- **监制台**（[Ticketflow](https://github.com/suxing412/Ticketflow)）：AI 工作流管理工具，单独一个仓库
 - `404.html`：GitHub Pages 自动启用的 404 页
 
 ## 技术说明
